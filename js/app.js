@@ -90,12 +90,7 @@ const featureIds = [
 "tradingControl",
 
 "buyTax",
-"sellTax",
-
-"website",
-"telegram",
-"twitter",
-"logo"
+"sellTax"
 
 ];
 
