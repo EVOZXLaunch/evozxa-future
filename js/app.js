@@ -96,6 +96,26 @@ function updateFee() {
 
 const features = {};
 
+features.website =
+document.getElementById(
+"websiteUrl"
+).value.trim() !== "";
+
+features.telegram =
+document.getElementById(
+"telegramUrl"
+).value.trim() !== "";
+
+features.twitter =
+document.getElementById(
+"twitterUrl"
+).value.trim() !== "";
+
+features.logo =
+document.getElementById(
+"logoUrl"
+).value.trim() !== "";
+
 featureIds.forEach(id => {
 
 features[id] =
@@ -123,6 +143,22 @@ document
 .getElementById(id)
 ?.addEventListener(
 "change",
+updateFee
+);
+
+});
+
+[
+"websiteUrl",
+"telegramUrl",
+"twitterUrl",
+"logoUrl"
+].forEach(id => {
+
+document
+.getElementById(id)
+?.addEventListener(
+"input",
 updateFee
 );
 
