@@ -19,6 +19,10 @@ buildTokenConfig,
 validateConfig
 } from "./deploy.js";
 
+import {
+FACTORY_ADDRESS
+} from "./config.js";
+
 const connectBtn =
 document.getElementById("connectBtn");
 
@@ -227,8 +231,111 @@ console.log(
 evozx.target
 );
 
+const fee =
+await factory.getDeploymentFee(
+config
+);
+
+console.log(
+"DEPLOY FEE",
+fee.toString()
+);
+
+const balance =
+await evozx.balanceOf(
+getAddress()
+);
+
+if(balance < fee){
+
+throw new Error(
+"Insufficient EVOZX balance"
+);
+
+}
+
+const allowance =
+await evozx.allowance(
+getAddress(),
+FACTORY_ADDRESS
+);
+
+if(allowance < fee){
+
+console.log(
+"Approving EVOZX..."
+);
+
+const approveTx =
+await evozx.approve(
+FACTORY_ADDRESS,
+fee
+);
+
+await approveTx.wait();
+
+}
+
+console.log(
+"Creating Token..."
+);
+
+const tx =
+await factory.createToken(
+config
+);
+
+const receipt =
+await tx.wait();
+
+let tokenAddress = null;
+
+for(
+const log of receipt.logs
+){
+
+try{
+
+const parsed =
+factory.interface.parseLog(
+log
+);
+
+if(
+parsed &&
+parsed.name ===
+"TokenCreated"
+){
+
+tokenAddress =
+parsed.args.token;
+
+break;
+
+}
+
+}catch{}
+
+}
+
+if(!tokenAddress){
+
+throw new Error(
+"Token address not found"
+);
+
+}
+
+console.log(
+"DEPLOYED TOKEN",
+tokenAddress
+);
+
 alert(
-"Deploy engine initialized"
+`Token deployed successfully!
+
+Address:
+${tokenAddress}`
 );
 
 }
