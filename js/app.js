@@ -69,6 +69,7 @@ balances.evozx
         }
 
     }
+);
 
 const featureIds = [
 
@@ -128,5 +129,3 @@ updateFee
 });
 
 updateFee();
-
-);
