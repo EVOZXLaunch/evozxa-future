@@ -64,5 +64,4 @@ if(features.logo)
 total += FEATURE_PRICES.logo;
 
 return total;
-
 }
