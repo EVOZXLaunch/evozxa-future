@@ -256,4 +256,20 @@ height:18px;
 
 margin:0;
 }
+
+.advanced-box{
+margin-top:24px;
+}
+
+.advanced-box h3{
+margin-bottom:16px;
+}
+
+.section-space{
+margin-top:24px;
+}
+
+.advanced-box input{
+margin-bottom:12px;
+}
 }
