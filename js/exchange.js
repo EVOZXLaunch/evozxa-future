@@ -2,23 +2,26 @@ import { CONFIG } from "./config.js";
 
 export async function loadExchange(
     signer
-) {
+){
 
     const abi =
         await fetch(
             "./abi/exchange.json"
-        ).then(r => r.json());
+        ).then(
+            r => r.json()
+        );
 
     return new ethers.Contract(
         CONFIG.EXCHANGE,
         abi,
         signer
     );
+
 }
 
 export async function getRate(
     signer
-) {
+){
 
     const exchange =
         await loadExchange(
@@ -31,8 +34,8 @@ export async function getRate(
 
 export async function buyMissingEVOZX(
     signer,
-    missingEvozx
-) {
+    missingAmountWei
+){
 
     const exchange =
         await loadExchange(
@@ -42,15 +45,16 @@ export async function buyMissingEVOZX(
     const rate =
         await exchange.rate();
 
-    const evozRequired =
-        missingEvozx * rate;
+    const evozRequiredWei =
+        missingAmountWei *
+        rate;
 
     const tx =
         await exchange.buyEVOZX({
+
             value:
-            ethers.parseEther(
-                evozRequired.toString()
-            )
+            evozRequiredWei
+
         });
 
     await tx.wait();
