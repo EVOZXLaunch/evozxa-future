@@ -1,4 +1,10 @@
-import { connectWallet } from "./wallet.js";
+import {
+connectWallet
+} from "./wallet.js";
+
+import {
+loadBalances
+} from "./balance.js";
 
 const connectBtn =
 document.getElementById("connectBtn");
@@ -22,6 +28,31 @@ connectBtn.addEventListener(
             connectBtn.textContent =
                 shortAddress;
 
+document.getElementById(
+"walletAddress"
+).textContent =
+shortAddress;
+
+const balances =
+await loadBalances(
+wallet.provider,
+wallet.address
+);
+
+document.getElementById(
+"evozBalance"
+).textContent =
+Number(
+balances.evoz
+).toFixed(4);
+
+document.getElementById(
+"evozxBalance"
+).textContent =
+Number(
+balances.evozx
+).toFixed(4);
+            
         } catch (error) {
 
             console.error(error);
