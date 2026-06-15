@@ -20,7 +20,7 @@ validateConfig
 } from "./deploy.js";
 
 import {
-FACTORY_ADDRESS
+CONFIG
 } from "./config.js";
 
 const connectBtn =
@@ -257,7 +257,7 @@ throw new Error(
 const allowance =
 await evozx.allowance(
 getAddress(),
-FACTORY_ADDRESS
+CONFIG.FACTORY
 );
 
 if(allowance < fee){
@@ -268,7 +268,7 @@ console.log(
 
 const approveTx =
 await evozx.approve(
-FACTORY_ADDRESS,
+CONFIG.FACTORY,
 fee
 );
 
