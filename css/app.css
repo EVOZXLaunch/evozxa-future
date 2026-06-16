@@ -476,12 +476,12 @@ button:hover{
 ========================= */
 .dapp-footer {
   text-align: center;
-  padding: 24px 16px 40px 16px; /* Jarak bawah ekstra agar nyaman di layar HP */
+  padding: 17px 16px 30px 16px; /* Jarak bawah ekstra agar nyaman di layar HP */
   margin-top: 16px;
 }
 
 .dapp-footer p {
-  font-size: 13px;
+  font-size: 8px;
   color: var(--muted);
   letter-spacing: 0.8px;
   opacity: 0.6;
