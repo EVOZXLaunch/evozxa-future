@@ -7,66 +7,43 @@
     <link rel="stylesheet" href="./css/app.css">
 </head>
 <body>
-    <div id="app">
-        <header class="topbar">
-            <div class="brand">
-                <img src="./images/logo.png" alt="EVOZXa">
-                <span>EVOZXa FUTURE</span>
-            </div>
-            
-            <nav class="nav-links">
-                <a href="index.html" style="color: white; margin-right: 20px;">Deploy</a>
-                <a href="dashboard.html" style="color: var(--gold); font-weight: bold;">Dashboard</a>
-            </nav>
 
-            <button id="connectBtn">Connect Wallet</button>
-        </header>
-
-        <main class="container">
-            <section class="hero">
-                <h1>My Deployed Tokens</h1>
-                <p>Manage your smart contracts on EVOZ Mainnet.</p>
-            </section>
-
-            <section class="card">
-                <table id="tokenTable" style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="text-align: left; border-bottom: 1px solid #333;">
-                            <th style="padding: 10px;">Token Name</th>
-                            <th style="padding: 10px;">Symbol</th>
-                            <th style="padding: 10px;">Status</th>
-                            <th style="padding: 10px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tokenList">
-                        </tbody>
-                </table>
-            </section>
-        </main>
+<header class="topbar">
+    <div class="brand">
+        <img src="./images/logo.png" alt="EVOZXa">
+        <span>EVOZXa FUTURE</span>
     </div>
+    <nav class="nav-links">
+        <a href="index.html">Deploy</a>
+        <a href="dashboard.html" style="color: var(--gold); font-weight: bold;">Dashboard</a>
+    </nav>
+</header>
 
-    <script type="module" src="./js/app.js"></script>
+<main class="container">
+    <section class="hero">
+        <h1>Your Deployed Tokens</h1>
+        <p>Manage and verify your smart contracts from here.</p>
+    </section>
 
-    <script type="module">
-        window.addEventListener('DOMContentLoaded', () => {
-            const tokenList = document.getElementById("tokenList");
-            const tokens = JSON.parse(localStorage.getItem("myTokens") || "[]");
+    <section class="card">
+        <table id="tokenTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tokenList">
+                </tbody>
+        </table>
+        <div id="noTokens" style="text-align: center; padding: 20px; color: var(--muted); display: none;">
+            No tokens found. Deploy one first!
+        </div>
+    </section>
+</main>
 
-            if (tokens.length === 0) {
-                tokenList.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;">No tokens deployed yet.</td></tr>';
-            } else {
-                tokens.forEach(t => {
-                    tokenList.innerHTML += `
-                        <tr style="border-bottom: 1px solid #222;">
-                            <td style="padding: 10px;">${t.name}</td>
-                            <td style="padding: 10px;">${t.symbol}</td>
-                            <td style="padding: 10px; color: #00ff88;">Verified</td>
-                            <td style="padding: 10px;"><a href="#" style="color: var(--gold);">Explorer</a></td>
-                        </tr>
-                    `;
-                });
-            }
-        });
-    </script>
+<script type="module" src="./js/dashboard.js"></script>
 </body>
 </html>
