@@ -25,13 +25,15 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 input { width: 100%; margin-top: 12px; padding: 14px; background: #111827; color: white; border: 1px solid var(--border); border-radius: 12px; }
 input:focus { outline: none; border-color: var(--gold); }
 
-/* Accordion Utama (Metadata & Advanced) */
+/* Accordion Utama */
 .accordion-item { margin-top: 15px; }
 .accordion-header { 
     background: #1e293b; padding: 14px; border-radius: 12px; cursor: pointer; 
     display: flex; justify-content: space-between; font-weight: 700; 
     border: 1px solid var(--border); color: var(--gold); font-size: 14px;
+    transition: background 0.3s ease;
 }
+.accordion-header:hover { background: #26344d; }
 .accordion-content { display: none; padding: 10px 0; }
 
 /* Sub-fitur (Checkbox di dalam Accordion) */
@@ -51,14 +53,17 @@ input:focus { outline: none; border-color: var(--gold); }
 .checkbox-grid label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
 .features-box input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
 
-/* Mobile Responsive */
+/* Button & Responsiveness */
+button { 
+    cursor: pointer; border: none; padding: 14px 18px; border-radius: 12px; 
+    background: linear-gradient(135deg, var(--gold), var(--blue)); 
+    color: white; font-weight: 700; width: 100%; transition: opacity 0.2s;
+}
+button:hover { opacity: 0.9; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
 @media(max-width: 900px) {
     .grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 28px; }
     .wallet-info { grid-template-columns: 1fr; }
-}
-
-button { 
-    cursor: pointer; border: none; padding: 14px 18px; border-radius: 12px; 
-    background: linear-gradient(135deg, var(--gold), var(--blue)); color: white; font-weight: 700; width: 100%;
 }
