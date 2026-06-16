@@ -110,9 +110,12 @@ button:hover{ border-color: var(--gold); color: var(--gold); box-shadow: var(--g
   padding-top: 16px; padding-bottom: 16px;
 }
 
-/* =========================================================
+/* Menjamin elemen input paling akhir di dalam kelompok besar menutup rapat tanpa lubang pixel */
+.main-accordion-content input:last-of-type { margin-bottom: 0; }
+
+/* =========================
    LEVEL 2: SUB-ACCORDION (Di Dalam Kelompok Besar)
-========================================================= */
+========================= */
 .sub-accordion-item {
   margin-bottom: 12px; border: 1px solid rgba(37, 99, 235, 0.15);
   border-radius: 10px; background: rgba(16, 27, 53, 0.4); overflow: hidden;
@@ -134,8 +137,15 @@ button:hover{ border-color: var(--gold); color: var(--gold); box-shadow: var(--g
 /* PEMICU SUB-ACCORDION DI-CENTANG (CHECKED) */
 .sub-accordion-item:has(input[type="checkbox"]:checked) { border-color: var(--blue); background: rgba(10, 17, 38, 0.6); }
 .sub-accordion-item:has(input[type="checkbox"]:checked) label { color: #ffffff; border-bottom: 1px dashed rgba(37, 99, 235, 0.15); }
+
+/* Batas tinggi maksimum dinaikkan ke 150px agar deskripsi Trading Control aman tidak terpotong */
 .sub-accordion-item:has(input[type="checkbox"]:checked) .sub-accordion-content {
-  max-height: 120px; padding-top: 12px;
+  max-height: 150px; padding-top: 12px;
+}
+
+/* Jarak pemisah pembuka khusus untuk baris awal burn tax */
+#burnTaxShare {
+  margin-top: 16px !important;
 }
 
 /* =========================
@@ -174,4 +184,3 @@ button:hover{ border-color: var(--gold); color: var(--gold); box-shadow: var(--g
 
 @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleInBox { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-             
