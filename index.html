@@ -8,19 +8,10 @@
 
 <link rel="stylesheet" href="./css/app.css">
 
-<!-- FONT -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
 </head>
 
 <body>
-
-<!-- BACKGROUND LAYERS -->
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
 
 <div id="app">
 
@@ -32,31 +23,22 @@
 <span>EVOZXA FUTURE</span>
 </div>
 
-<div class="top-actions">
 <button id="connectBtn">Connect Wallet</button>
-</div>
 
 </header>
 
-<!-- ================= MAIN ================= -->
 <main class="container">
 
 <!-- ================= HERO ================= -->
 <section class="hero">
 
-<h1 id="heroText">Create Professional Tokens On EVOZ</h1>
+<h1>Create Professional Tokens On EVOZ</h1>
 
 <p>
 Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 </p>
 
-<!-- STATUS -->
-<div class="status-indicator">
-<span class="dot"></span>
-<span id="statusText">SYSTEM READY</span>
-</div>
-
-<!-- WALLET PANEL -->
+<!-- WALLET STATUS -->
 <div id="walletInfo" class="wallet-info">
 
 <div class="wallet-item">
@@ -76,12 +58,18 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 
 </div>
 
+<!-- DEPLOY STATUS (IMPORTANT FOR JS SYNC) -->
+<div id="deployStatus" class="status-indicator">
+<span class="dot"></span>
+<span>READY</span>
+</div>
+
 </section>
 
 <!-- ================= GRID ================= -->
 <div class="grid">
 
-<!-- ================= LEFT: FORM ================= -->
+<!-- LEFT PANEL -->
 <section class="card">
 
 <h2>Token Configuration</h2>
@@ -89,31 +77,27 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 <form id="tokenForm">
 
 <!-- BASIC -->
-<input id="name" type="text" placeholder="Token Name" />
-<input id="symbol" type="text" placeholder="Symbol" />
-<input id="supply" type="number" placeholder="Total Supply" />
+<input id="name" type="text" placeholder="Token Name"/>
+<input id="symbol" type="text" placeholder="Symbol"/>
+<input id="supply" type="number" placeholder="Total Supply"/>
 
 <!-- FEATURES -->
 <div class="features-box">
 
 <h3>Features</h3>
 
-<div class="feature-list">
-
-<label><input type="checkbox" id="burnable"><span>Burnable</span></label>
-<label><input type="checkbox" id="mintable"><span>Mintable</span></label>
-<label><input type="checkbox" id="ownership"><span>Ownership</span></label>
-<label><input type="checkbox" id="maxWallet"><span>Max Wallet</span></label>
-<label><input type="checkbox" id="maxTx"><span>Max TX</span></label>
-<label><input type="checkbox" id="tradingControl"><span>Trading Control</span></label>
-<label><input type="checkbox" id="buyTax"><span>Buy Tax</span></label>
-<label><input type="checkbox" id="sellTax"><span>Sell Tax</span></label>
-<label><input type="checkbox" id="website"><span>Website</span></label>
-<label><input type="checkbox" id="telegram"><span>Telegram</span></label>
-<label><input type="checkbox" id="twitter"><span>Twitter</span></label>
-<label><input type="checkbox" id="logo"><span>Logo</span></label>
-
-</div>
+<label><input type="checkbox" id="burnable"> Burnable</label>
+<label><input type="checkbox" id="mintable"> Mintable</label>
+<label><input type="checkbox" id="ownership"> Ownership</label>
+<label><input type="checkbox" id="maxWallet"> Max Wallet</label>
+<label><input type="checkbox" id="maxTx"> Max TX</label>
+<label><input type="checkbox" id="tradingControl"> Trading Control</label>
+<label><input type="checkbox" id="buyTax"> Buy Tax</label>
+<label><input type="checkbox" id="sellTax"> Sell Tax</label>
+<label><input type="checkbox" id="website"> Website</label>
+<label><input type="checkbox" id="telegram"> Telegram</label>
+<label><input type="checkbox" id="twitter"> Twitter</label>
+<label><input type="checkbox" id="logo"> Logo</label>
 
 </div>
 
@@ -122,22 +106,20 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 
 <h3>Metadata</h3>
 
-<input id="websiteUrl" type="text" placeholder="Website URL" />
-<input id="telegramUrl" type="text" placeholder="Telegram URL" />
-<input id="twitterUrl" type="text" placeholder="Twitter URL" />
-<input id="logoUrl" type="text" placeholder="Logo URL" />
+<input id="websiteUrl" type="text" placeholder="Website URL"/>
+<input id="telegramUrl" type="text" placeholder="Telegram URL"/>
+<input id="twitterUrl" type="text" placeholder="Twitter URL"/>
+<input id="logoUrl" type="text" placeholder="Logo URL"/>
 
-<!-- ADVANCED -->
 <h3 class="section-space">Advanced Settings</h3>
 
-<input id="buyTaxValue" type="number" placeholder="Buy Tax %" />
-<input id="sellTaxValue" type="number" placeholder="Sell Tax %" />
-<input id="maxWalletValue" type="number" placeholder="Max Wallet %" />
-<input id="maxTxValue" type="number" placeholder="Max TX %" />
-<input id="burnTaxShare" type="number" placeholder="Burn Tax Share %" />
-
-<input id="marketingWallet" type="text" placeholder="Marketing Wallet" />
-<input id="developmentWallet" type="text" placeholder="Development Wallet" />
+<input id="buyTaxValue" type="number" placeholder="Buy Tax %"/>
+<input id="sellTaxValue" type="number" placeholder="Sell Tax %"/>
+<input id="maxWalletValue" type="number" placeholder="Max Wallet %"/>
+<input id="maxTxValue" type="number" placeholder="Max TX %"/>
+<input id="burnTaxShare" type="number" placeholder="Burn Tax Share %"/>
+<input id="marketingWallet" type="text" placeholder="Marketing Wallet"/>
+<input id="developmentWallet" type="text" placeholder="Development Wallet"/>
 
 </div>
 
@@ -145,7 +127,7 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 
 </section>
 
-<!-- ================= RIGHT: DEPLOY ================= -->
+<!-- RIGHT PANEL -->
 <section class="card">
 
 <h2>Deployment Summary</h2>
@@ -154,12 +136,12 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 
 <div class="summary-row">
 <span>Total EVOZX Fee</span>
-<strong id="evozxFee">0</strong>
+<strong id="evozxFee">--</strong>
 </div>
 
 <div class="summary-row">
 <span>Total EVOZ Value</span>
-<strong id="evozFee">0</strong>
+<strong id="evozFee">--</strong>
 </div>
 
 </div>
@@ -174,7 +156,7 @@ Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.
 
 </div>
 
-<!-- ================= SCRIPTS ================= -->
+<!-- SCRIPTS -->
 <script type="module" src="./js/app.js"></script>
 <script type="module" src="./js/main.js"></script>
 
