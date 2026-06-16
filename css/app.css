@@ -497,7 +497,7 @@ button:hover{
 
 
 /* =========================================================
-   KUSTOM POPUP MODAL MODERN (Wizard Dynamic Mirror)
+   CUSTOM POPUP MODAL MODERN (Wizard Dynamic Mirror)
 ========================================================= */
 .modal-overlay {
   position: fixed;
@@ -547,7 +547,7 @@ button:hover{
   white-space: pre-line; /* Memastikan alamat wallet atau baris baru rapi */
 }
 
-/* Tombol Aksi Konfirmasi */
+/* Tombol Aksi Konfirmasi (Localized to Full English formatting) */
 .modal-btn {
   width: 100%;
   padding: 12px 24px;
@@ -558,7 +558,7 @@ button:hover{
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
+  text-transform: uppercase; /* Displays "Confirm" as "CONFIRM" perfectly */
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -590,4 +590,5 @@ button:hover{
     opacity: 1;
     transform: scale(1) translateY(0);
   }
-}
+  }
+  
