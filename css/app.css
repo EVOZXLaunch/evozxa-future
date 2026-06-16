@@ -285,13 +285,16 @@ button:hover{
   margin-bottom: 8px;
 }
 
-.features-box h3, .advanced-box h3 {
-  margin-bottom: 12px;
+.features-box h3, .main-accordion-header {
   color: var(--muted);
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.features-box h3 {
+  margin-bottom: 12px;
 }
 
 .features-box label {
@@ -327,69 +330,90 @@ button:hover{
   cursor: pointer;
 }
 
-/* =========================
-   ACCORDION SYSTEM (Universal)
-========================= */
-.accordion-item {
-  margin-bottom: 12px;
+/* =========================================================
+   GROUP ACCORDION SYSTEM (Metadata & Advanced Settings)
+========================================================= */
+.main-accordion-item {
+  margin-top: 16px;
+  margin-bottom: 16px;
   border: 1px solid rgba(37, 99, 235, 0.2);
-  border-radius: 10px;
-  background: rgba(10, 17, 38, 0.5);
+  border-radius: 12px;
+  background: rgba(10, 17, 38, 0.4);
   overflow: hidden;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.accordion-item label {
+/* Sembunyikan checkbox internal penampung klik */
+.group-toggle {
+  display: none;
+}
+
+/* Bar Header Utama */
+.main-accordion-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  padding: 16px 20px;
   cursor: pointer;
-  color: #b9cad9;
-  font-weight: 500;
   user-select: none;
+  background: rgba(10, 17, 38, 0.6);
   transition: background 0.2s, color 0.2s;
+  margin-bottom: 0;
 }
 
-.accordion-item label:hover {
-  background: rgba(37, 99, 235, 0.06);
+.main-accordion-header:hover {
+  background: rgba(37, 99, 235, 0.08);
   color: #ffffff;
 }
 
-.accordion-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--blue);
-  margin: 0;
-  cursor: pointer;
+/* Penanda Ikon Panah Turun */
+.main-accordion-header .arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+  color: var(--muted);
 }
 
-.accordion-content {
+/* Kotak Konten Panel Input (Default: Tersembunyi) */
+.main-accordion-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0 16px;
-  background: rgba(4, 8, 20, 0.2);
+  padding: 0 20px;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;
+  background: rgba(4, 8, 20, 0.15);
 }
 
-.accordion-content input {
-  margin-top: 2px;
-  margin-bottom: 14px;
+/* Jarak aman elemen masukan pertama & terakhir di dalam panel */
+.main-accordion-content input:first-of-type {
+  margin-top: 16px;
 }
 
-.accordion-item:has(input[type="checkbox"]:checked) {
+.main-accordion-content input:last-of-type {
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   LOGIKA AKORDION KETIKA DIKLIK BUKA (CHECKED)
+========================================================= */
+.main-accordion-item:has(.group-toggle:checked) {
   border-color: var(--blue);
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.2);
 }
 
-.accordion-item:has(input[type="checkbox"]:checked) label {
+.main-accordion-item:has(.group-toggle:checked) .main-accordion-header {
   color: #ffffff;
-  border-bottom: 1px dashed rgba(37, 99, 235, 0.15);
+  border-bottom: 1px dashed rgba(37, 99, 235, 0.2);
 }
 
-.accordion-item:has(input[type="checkbox"]:checked) .accordion-content {
-  max-height: 100px;
-  padding-top: 12px;
+/* Memutar arah tanda panah ke atas */
+.main-accordion-item:has(.group-toggle:checked) .main-accordion-header .arrow {
+  transform: rotate(180deg);
+  color: #ffffff;
+}
+
+/* Membuka ruang slide-down konten sesuai volume tinggi input */
+.main-accordion-item:has(.group-toggle:checked) .main-accordion-content {
+  max-height: 620px; 
+  padding-bottom: 8px;
 }
 
 /* =========================
@@ -429,10 +453,6 @@ button:hover{
 .blue{
   color: #38bdf8;
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-}
-
-.advanced-box .section-space {
-  margin-top: 24px;
 }
 
 /* =========================
@@ -476,7 +496,7 @@ button:hover{
 ========================= */
 .dapp-footer {
   text-align: center;
-  padding: 17px 16px 30px 16px; /* Jarak bawah ekstra agar nyaman di layar HP */
+  padding: 17px 16px 30px 16px; 
   margin-top: 16px;
 }
 
@@ -488,13 +508,11 @@ button:hover{
   transition: opacity 0.3s ease;
 }
 
-/* Efek menyala tipis saat kursor diarahkan ke footer */
 .dapp-footer p:hover {
   opacity: 1;
   color: var(--text);
   text-shadow: 0 0 8px rgba(213, 228, 245, 0.2);
 }
-
 
 /* =========================================================
    CUSTOM POPUP MODAL MODERN (Wizard Dynamic Mirror)
@@ -505,8 +523,8 @@ button:hover{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(4, 8, 20, 0.75); /* Latar gelap transparan */
-  backdrop-filter: blur(8px);       /* Efek blur kaca premium */
+  background: rgba(4, 8, 20, 0.75); 
+  backdrop-filter: blur(8px);       
   display: flex;
   justify-content: center;
   align-items: center;
@@ -544,10 +562,9 @@ button:hover{
   color: var(--text);
   line-height: 1.6;
   word-wrap: break-word;
-  white-space: pre-line; /* Memastikan alamat wallet atau baris baru rapi */
+  white-space: pre-line; 
 }
 
-/* Tombol Aksi Konfirmasi (Localized to Full English formatting) */
 .modal-btn {
   width: 100%;
   padding: 12px 24px;
@@ -558,7 +575,7 @@ button:hover{
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  text-transform: uppercase; /* Displays "Confirm" as "CONFIRM" perfectly */
+  text-transform: uppercase; 
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -575,7 +592,6 @@ button:hover{
   transform: translateY(0);
 }
 
-/* Animasi Muncul Semakin Halus */
 @keyframes fadeInOverlay {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -590,5 +606,4 @@ button:hover{
     opacity: 1;
     transform: scale(1) translateY(0);
   }
-  }
-  
+}
