@@ -8,7 +8,7 @@
 
 <link rel="stylesheet" href="./css/app.css">
 
-<!-- FONT: Jakarta -->
+<!-- FONT -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -18,12 +18,11 @@
 
 <body>
 
-<!-- MATRIX BACKGROUND -->
+<!-- BACKGROUND LAYERS (ORDER FIXED) -->
 <canvas id="matrix"></canvas>
-<div class="scanlines"></div>
-<!-- CYBERPUNK BACKGROUND EFFECT -->
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
+<div class="scanlines"></div>
 
 <div id="app">
 
@@ -34,14 +33,13 @@
 <span>EVOZXA FUTURE</span>
 </div>
 
-<button id="connectBtn">
-Connect Wallet
-</button>
+<button id="connectBtn">Connect Wallet</button>
 
 </header>
 
 <main class="container">
 
+<!-- HERO -->
 <section class="hero">
 
 <h1 id="heroText">Create Professional Tokens On EVOZ</h1>
@@ -51,13 +49,15 @@ Deploy, Verify and Manage smart contracts directly
 on EVOZ Mainnet.
 </p>
 
-<div id="walletInfo" class="wallet-info">
-
+<!-- STATUS (FIXED OUT OF GRID) -->
 <div class="status-indicator">
 <span class="dot"></span>
 <span id="statusText">SYSTEM READY</span>
 </div>
-  
+
+<!-- WALLET INFO -->
+<div id="walletInfo" class="wallet-info">
+
 <div class="wallet-item">
 <span>Wallet</span>
 <strong id="walletAddress">Not Connected</strong>
@@ -77,8 +77,10 @@ on EVOZ Mainnet.
 
 </section>
 
+<!-- GRID -->
 <div class="grid">
 
+<!-- LEFT CARD -->
 <section class="card">
 
 <h2>Token Configuration</h2>
@@ -137,6 +139,7 @@ on EVOZ Mainnet.
 
 </section>
 
+<!-- RIGHT CARD -->
 <section class="card">
 
 <h2>Deployment Summary</h2>
@@ -165,8 +168,11 @@ on EVOZ Mainnet.
 
 </div>
 
+<!-- SCRIPTS -->
 <script type="module" src="./js/app.js"></script>
 <script type="module" src="./js/main.js"></script>
+
+<!-- MATRIX -->
 <script>
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
@@ -178,65 +184,57 @@ const letters = "01EVOZXFUTURE#@$%&*";
 const fontSize = 14;
 const columns = canvas.width / fontSize;
 
-const drops = [];
+const drops = Array.from({length: columns}, () => 1);
 
-for (let i = 0; i < columns; i++) {
-    drops[i] = 1;
+function draw(){
+ctx.fillStyle = "rgba(0,0,0,0.08)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "#d4af37";
+ctx.font = fontSize + "px monospace";
+
+for(let i=0;i<drops.length;i++){
+const text = letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize > canvas.height && Math.random()>0.975){
+drops[i]=0;
 }
 
-function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#00f5ff";
-    ctx.font = fontSize + "px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-        }
-
-        drops[i]++;
-    }
+drops[i]++;
+}
 }
 
-setInterval(draw, 33);
+setInterval(draw,33);
 </script>
 
+<!-- UI LOGIC -->
 <script>
-/* =========================
-   AI TYPING EFFECT
-========================= */
 const heroText = document.getElementById("heroText");
-
 const text = "Create Professional Tokens On EVOZ";
 let i = 0;
 
 heroText.textContent = "";
 
-function type(){
+(function type(){
 if(i < text.length){
-heroText.textContent += text.charAt(i);
-i++;
+heroText.textContent += text.charAt(i++);
 setTimeout(type, 60);
 }
-}
+})();
 
-type();
-
-/* =========================
-   STATUS PULSE (SIMULATED)
-========================= */
 const statusText = document.getElementById("statusText");
 
 setInterval(() => {
-const states = ["SYSTEM READY", "SYNCING CHAIN...", "WALLET SCANNED", "NETWORK STABLE"];
+const states = [
+"SYSTEM READY",
+"SYNCING CHAIN...",
+"WALLET SCANNED",
+"NETWORK STABLE"
+];
 statusText.textContent = states[Math.floor(Math.random()*states.length)];
 }, 3000);
 </script>
-  
+
 </body>
 </html>
