@@ -57,7 +57,8 @@ export async function loadExchange(
 
 }
 
-export function buildTokenConfig() {
+// Menambahkan parameter ownerAddress agar wallet penandatangan otomatis menjadi fallback receiver tax
+export function buildTokenConfig(ownerAddress) {
 
     const marketingWalletInput =
         document
@@ -98,7 +99,7 @@ export function buildTokenConfig() {
         ),
 
         owner:
-        ethers.ZeroAddress,
+        ownerAddress || ethers.ZeroAddress, // Diisi otomatis oleh alamat pencipta kontrak
 
         chainId:
         0,
@@ -239,8 +240,8 @@ export function buildTokenConfig() {
             )
         ),
 
+        // Jika form kosong, otomatis arahkan tax ke dompet deployer (ownerAddress) agar lolos validasi SC
         marketingWallet:
-
         marketingWalletInput &&
         ethers.isAddress(
             marketingWalletInput
@@ -248,10 +249,9 @@ export function buildTokenConfig() {
         ?
         marketingWalletInput
         :
-        ethers.ZeroAddress,
+        (ownerAddress || ethers.ZeroAddress),
 
         developmentWallet:
-
         developmentWalletInput &&
         ethers.isAddress(
             developmentWalletInput
@@ -259,7 +259,7 @@ export function buildTokenConfig() {
         ?
         developmentWalletInput
         :
-        ethers.ZeroAddress
+        (ownerAddress || ethers.ZeroAddress)
 
     };
 
