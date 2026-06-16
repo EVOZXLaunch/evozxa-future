@@ -113,26 +113,47 @@ Ownership
   </label>
   
   <div class="main-accordion-content">
-    <input
-      id="websiteUrl"
-      type="text"
-      placeholder="Website URL"
-    />
-    <input
-      id="telegramUrl"
-      type="text"
-      placeholder="Telegram URL"
-    />
-    <input
-      id="twitterUrl"
-      type="text"
-      placeholder="Twitter URL"
-    />
-    <input
-      id="logoUrl"
-      type="text"
-      placeholder="Logo URL"
-    />
+    
+    <div class="sub-accordion-item">
+      <label for="website">
+        <input type="checkbox" id="website">
+        Website
+      </label>
+      <div class="sub-accordion-content">
+        <input id="websiteUrl" type="text" placeholder="Website URL" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="telegram">
+        <input type="checkbox" id="telegram">
+        Telegram
+      </label>
+      <div class="sub-accordion-content">
+        <input id="telegramUrl" type="text" placeholder="Telegram URL" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="twitter">
+        <input type="checkbox" id="twitter">
+        Twitter
+      </label>
+      <div class="sub-accordion-content">
+        <input id="twitterUrl" type="text" placeholder="Twitter URL" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="logo">
+        <input type="checkbox" id="logo">
+        Logo
+      </label>
+      <div class="sub-accordion-content">
+        <input id="logoUrl" type="text" placeholder="Logo URL" />
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -144,46 +165,63 @@ Ownership
   </label>
   
   <div class="main-accordion-content">
-    <input
-      id="maxWallet"
-      type="number"
-      placeholder="Max Wallet %"
-    />
-    <input
-      id="maxTx"
-      type="number"
-      placeholder="Max TX %"
-    />
-    <input
-      id="tradingControl"
-      type="number"
-      placeholder="Trading Control %"
-    />
-    <input
-      id="buyTax"
-      type="number"
-      placeholder="Buy Tax %"
-    />
-    <input
-      id="sellTax"
-      type="number"
-      placeholder="Sell Tax %"
-    />
-    <input
-      id="burnTaxShare"
-      type="number"
-      placeholder="Burn Tax Share %"
-    />
-    <input
-      id="marketingWallet"
-      type="text"
-      placeholder="Marketing Wallet"
-    />
-    <input
-      id="developmentWallet"
-      type="text"
-      placeholder="Development Wallet"
-    />
+    
+    <div class="sub-accordion-item">
+      <label for="maxWallet">
+        <input type="checkbox" id="maxWallet">
+        Max Wallet
+      </label>
+      <div class="sub-accordion-content">
+        <input id="maxWalletValue" type="number" placeholder="Max Wallet %" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="maxTx">
+        <input type="checkbox" id="maxTx">
+        Max TX
+      </label>
+      <div class="sub-accordion-content">
+        <input id="maxTxValue" type="number" placeholder="Max TX %" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="tradingControl">
+        <input type="checkbox" id="tradingControl">
+        Trading Control
+      </label>
+      <div class="sub-accordion-content">
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 14px; font-style: italic; padding: 0 4px;">
+          * Enables pausing/unpausing contract transactions.
+        </p>
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="buyTax">
+        <input type="checkbox" id="buyTax">
+        Buy Tax
+      </label>
+      <div class="sub-accordion-content">
+        <input id="buyTaxValue" type="number" placeholder="Buy Tax %" />
+      </div>
+    </div>
+
+    <div class="sub-accordion-item">
+      <label for="sellTax">
+        <input type="checkbox" id="sellTax">
+        Sell Tax
+      </label>
+      <div class="sub-accordion-content">
+        <input id="sellTaxValue" type="number" placeholder="Sell Tax %" />
+      </div>
+    </div>
+
+    <input id="burnTaxShare" type="number" placeholder="Burn Tax Share %" style="margin-top: 8px;" />
+    <input id="marketingWallet" type="text" placeholder="Marketing Wallet" />
+    <input id="developmentWallet" type="text" placeholder="Development Wallet" />
+
   </div>
 </div>
 
