@@ -2,59 +2,60 @@
 
 This guide explains the steps to verify token contracts that have been deployed via **EVOZXa FUTURE**. Verification ensures that the *source code* published in the *blockchain explorer* mathematically matches the *bytecode* of the deployed contract, increasing transparency and trust for your community.
 
-
-
 ---
 
 ## 1. Compiler Configuration (Required)
-When verifying, you must use the following *compiler* settings appropriately. If there is a parameter mismatch, the verification process will fail.
+When verifying, you must use the following *compiler* settings exactly. If there is a parameter mismatch, the verification process will fail.
 
 | Parameters | Value |
 | :--- | :--- |
 | **Compiler Version** | `0.8.34` |
 | **Optimization** | Enabled |
-| **Walking Optimizer** | `200` |
+| **Optimizer Runs** | `200` |
 | **EVM Version** | `Paris` |
 | **Verification Method** | Solidity (Standard JSON Input) |
 
-> **Warning:** These settings must be the same as the configuration during the *deployment* process.
+> **Warning:** These settings must be identical to the configuration used during the *deployment* process.
 
 ---
 
 ## 2. Verification Steps
 
 **Step 1: Access Your Contract**
-Open **EVOZ Explorer** and navigate to your token contract address.
+Open **EVOZ Explorer** and navigate to your deployed token contract address.
 
 **Step 2: Initiate Verification**
 On the contract page, click the **"Verify Contract"** button.
 
 **Step 3: Select Verification Method**
-In the method selection menu, select: **"Solidity (Standard JSON Input)"**.
+In the method selection menu, choose: **"Solidity (Standard JSON Input)"**.
 
 **Step 4: Compiler Configuration**
 Enter the parameters according to the **Compiler Configuration** table above.
 
 **Step 5: Upload JSON Standard Input File**
 Upload the `standard-input.json` file provided in the *Verification Package*. 
-* If you don't have it yet, download the latest version here: [Download standard-input.json](https://github.com/EVOZXLaunch/evozxa-future/raw/main/assets/standard-input.json)
+* Download the latest version here: 
+  <a href="https://github.com/EVOZXLaunch/evozxa-future/raw/main/assets/standard-input.json" download="standard-input.json" target="_blank">Download standard-input.json</a>
+
+> *Note: If the file opens as text in your browser, right-click the link above and select "Save Link As..." or "Save Target As..." to download it directly.*
 
 **Step 6: Submit Verification**
-Click the **"Send"** button. Explorer will recompile the *source code* and compare the *bytecode* with the active contract on the *chain*.
+Click the **"Submit"** button. The explorer will recompile the *source code* and compare the *bytecode* against the active contract on the *chain*.
 
 ---
 
 ## 3. Verification Results
-Verification is considered successful if:
-* Compiler version and optimization settings are appropriate.
-* *JSON Standard Input* is valid and matches *source code*.
+Verification is successful if:
+* The compiler version and optimization settings match.
+* The *JSON Standard Input* is valid and matches the *source code*.
 
-Once successful, your contract's *source code* and *metadata* will be open to the public in *explorer*, indicating that your contract has been officially verified.
+Once successful, your contract's *source code* and *metadata* will be publicly visible on the *explorer*, signifying that your contract is officially verified.
 
 ---
 
 ## 4. Verification Package
-The official verification package from EVOZXa FUTURE consists of:
+The official verification package from EVOZXa FUTURE includes:
 1. `LaunchKitToken.sol` (Primary Contract)
 2. `LaunchKitTypes.sol` (Contract Library)
 3. `standard-input.json` (Compilation Manifest)
@@ -62,9 +63,9 @@ The official verification package from EVOZXa FUTURE consists of:
 ---
 
 ## 5. Help & Troubleshooting
-If verification fails, re-verify the following points:
-* **Compiler Version:** Make sure you select `0.8.34`.
-* **Standard Input:** Make sure you do not change the contents of the downloaded `.json` file.
-* **EVM Version:** Make sure the `Paris` version is selected.
+If verification fails, double-check the following:
+* **Compiler Version:** Ensure you selected `0.8.34`.
+* **Standard Input:** Ensure you have not modified the contents of the downloaded `.json` file.
+* **EVM Version:** Ensure `Paris` is selected.
 
-If the problem persists, please contact our support team via official channels.
+If the problem persists, please contact our support team via our official channels.
