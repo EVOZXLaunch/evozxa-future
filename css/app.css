@@ -41,4 +41,6 @@ input { width: 100%; background: var(--bg-input); border: 1px solid var(--border
 .price-glowing { color: var(--gold-accent); font-weight: 700; }
 
 .premium-btn { width: 100%; background: linear-gradient(135deg, var(--blue-accent), #003f87); color: white; border: none; border-radius: 14px; padding: 15px; font-weight: 700; cursor: pointer; }
-.premium-btn:hover { filter: brightness(1.2); }
+.premium-btn:hover { filter: brightness(1.2); 
+}
+}
