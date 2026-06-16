@@ -4,6 +4,24 @@ import { loadFactory, loadEvozx, buildTokenConfig, validateConfig } from "./depl
 import { CONFIG } from "./config.js";
 
 // =========================================================
+// UI INITIALIZATION & ACCORDIONS (FIXED)
+// =========================================================
+const initApp = () => {
+    // Accordion Logic: Gunakan event delegation agar tidak berat di mobile
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('main-accordion-header')) {
+            const content = e.target.nextElementSibling;
+            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        }
+    });
+
+    // Inisialisasi Modal
+    const modal = document.getElementById('customModal');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    if (confirmBtn) confirmBtn.onclick = () => { if(modal) modal.style.display = 'none'; };
+};
+
+// =========================================================
 // GLOBAL WALLET UI & PERSISTENCE
 // =========================================================
 const connectBtn = document.getElementById("connectBtn");
@@ -28,76 +46,37 @@ async function updateWalletUI(wallet) {
     }
 }
 
-connectBtn?.addEventListener("click", async () => {
-    if (localStorage.getItem("walletConnected") === "true") {
-        await disconnectWallet();
-        updateWalletUI(null);
-    } else {
-        try {
-            const wallet = await connectWallet();
-            if (wallet) updateWalletUI(wallet);
-        } catch (error) {
-            alert(error.message || "Connection failed");
-        }
-    }
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Auto-reconnect
-    if (localStorage.getItem("walletConnected") === "true") {
-        try {
-            const wallet = await connectWallet();
-            if (wallet) updateWalletUI(wallet);
-        } catch (e) { localStorage.removeItem("walletConnected"); }
-    }
-    // 2. Inisialisasi Event Listener untuk Fee Calculator
-    const tokenForm = document.getElementById("tokenForm");
-    if (tokenForm) {
-        tokenForm.addEventListener("change", updateFee);
-        updateFee(); // Hitung awal
-    }
-});
-
 // =========================================================
-// MODAL & FEE LOGIC
+// MODAL ALERT HANDLER
 // =========================================================
-const inisialisasiModalAlert = () => {
+window.alert = function(message, tokenDetails = null) {
     const modal = document.getElementById('customModal');
-    if (!modal) return;
-    
-    window.alert = function(message, tokenDetails = null) {
-        const modalTitle = document.getElementById('modalTitle');
-        const modalMessage = document.getElementById('modalMessage');
-        const confirmBtn = document.getElementById('modalConfirmBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
 
-        if (tokenDetails) {
-            modalTitle.innerText = "Deployment Success!";
-            modalTitle.style.color = "#ffd700";
-            modalMessage.innerHTML = `
-                <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 10px; margin-bottom: 16px;">
-                    <p>Token <strong>${tokenDetails.name}</strong> berhasil dideploy!</p>
-                    <p>Address:<br><code>${tokenDetails.address}</code></p>
-                </div>
-                <p style="margin-top: 10px; font-size: 0.9em;">Token Anda sudah aktif! Klik link di bawah untuk panduan verifikasi kontrak agar token Anda terpercaya di explorer.</p>
-                <a href="verification-guide.html" style="display: block; margin-top: 15px; color: var(--gold); text-decoration: underline; font-weight: bold;">
-                    Read Verification Guide
-                </a>`;
-        } else {
-            modalTitle.innerText = "Notice";
-            modalTitle.style.color = "#fff";
-            modalMessage.innerText = message;
-        }
-        modal.style.display = 'flex';
-        confirmBtn.onclick = () => modal.style.display = 'none';
-    };
+    if (tokenDetails) {
+        modalTitle.innerText = "Deployment Success!";
+        modalTitle.style.color = "#ffd700";
+        modalMessage.innerHTML = `
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                <p>Token <strong>${tokenDetails.name}</strong> berhasil dideploy!</p>
+                <p style="word-break: break-all;">Address: <code>${tokenDetails.address}</code></p>
+            </div>
+            <p style="margin-top: 15px;">Klik link di bawah untuk panduan verifikasi kontrak.</p>
+            <a href="verification-guide.html" style="color: var(--gold); font-weight: bold;">Read Verification Guide</a>`;
+    } else {
+        modalTitle.innerText = "Notice";
+        modalTitle.style.color = "#fff";
+        modalMessage.innerText = message;
+    }
+    modal.style.display = 'flex';
 };
-inisialisasiModalAlert();
 
+// =========================================================
+// FEE CALCULATOR
+// =========================================================
 function updateFee() {
-    const checkboxes = [
-        "burnable", "mintable", "ownership", "maxWallet", 
-        "maxTx", "tradingControl", "buyTax", "sellTax"
-    ];
+    const checkboxes = ["burnable", "mintable", "ownership", "maxWallet", "maxTx", "tradingControl", "buyTax", "sellTax"];
     let fee = 10;
     checkboxes.forEach(id => {
         const el = document.getElementById(id);
@@ -110,10 +89,8 @@ function updateFee() {
             else if (["buyTax", "sellTax"].includes(id)) fee += 6;
         }
     });
-    const feeEl = document.getElementById("evozxFee");
-    const valEl = document.getElementById("evozFee");
-    if (feeEl) feeEl.textContent = fee;
-    if (valEl) valEl.textContent = fee * 5;
+    if (document.getElementById("evozxFee")) document.getElementById("evozxFee").textContent = fee;
+    if (document.getElementById("evozFee")) document.getElementById("evozFee").textContent = fee * 5;
 }
 
 // =========================================================
@@ -152,5 +129,25 @@ deployBtn?.addEventListener("click", async () => {
         alert(error.message);
     } finally {
         deployBtn.disabled = false;
+    }
+});
+
+// INITIALIZE APP
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+    if (localStorage.getItem("walletConnected") === "true") {
+        connectWallet().then(w => w && updateWalletUI(w)).catch(() => localStorage.removeItem("walletConnected"));
+    }
+    const tokenForm = document.getElementById("tokenForm");
+    if (tokenForm) tokenForm.addEventListener("change", updateFee);
+});
+
+connectBtn?.addEventListener("click", async () => {
+    if (localStorage.getItem("walletConnected") === "true") {
+        await disconnectWallet();
+        updateWalletUI(null);
+    } else {
+        const wallet = await connectWallet();
+        if (wallet) updateWalletUI(wallet);
     }
 });
