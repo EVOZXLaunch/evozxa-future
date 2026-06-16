@@ -25,26 +25,36 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 input { width: 100%; margin-top: 12px; padding: 14px; background: #111827; color: white; border: 1px solid var(--border); border-radius: 12px; }
 input:focus { outline: none; border-color: var(--gold); }
 
-/* Fungsionalitas Accordion (PENTING) */
-.main-accordion-header { 
-    background: #1e293b; padding: 14px; border-radius: 12px; margin-top: 15px; 
-    cursor: pointer; display: flex; justify-content: space-between; font-weight: 700; 
-    border: 1px solid var(--border); color: var(--gold);
+/* Accordion Utama (Metadata & Advanced) */
+.accordion-item { margin-top: 15px; }
+.accordion-header { 
+    background: #1e293b; padding: 14px; border-radius: 12px; cursor: pointer; 
+    display: flex; justify-content: space-between; font-weight: 700; 
+    border: 1px solid var(--border); color: var(--gold); font-size: 14px;
 }
-.main-accordion-content { display: none; padding: 10px 0; }
+.accordion-content { display: none; padding: 10px 0; }
 
-/* Features & Checkboxes */
-.features-box { margin-top: 24px; }
-.features-box label { 
-    display: flex; align-items: center; gap: 12px; padding: 10px 0; 
-    cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.05);
+/* Sub-fitur (Checkbox di dalam Accordion) */
+.feature-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
 }
-.features-box input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+.feature-wrapper label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; }
+.hidden-input { display: none; margin-top: 8px; width: 100%; }
+
+/* Features & Checkboxes Utama */
+.features-box { margin-top: 24px; }
+.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+.checkbox-grid label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.features-box input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
 
 /* Mobile Responsive */
 @media(max-width: 900px) {
     .grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 34px; }
+    .hero h1 { font-size: 28px; }
     .wallet-info { grid-template-columns: 1fr; }
 }
 
