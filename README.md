@@ -1,8 +1,7 @@
 <p align="center">
-  <img src="images/logo.png" width="160" alt="EVOZXa FUTURE Logo">
+  <img src="images/logo.png" width="240" alt="EVOZXa FUTURE Logo"><br>
+  <strong>EVOZXa FUTURE</strong>
 </p>
-
-<h1 align="center">EVOZXa FUTURE</h1>
 
 <p align="center">
   <a href="https://evozscan.com">
