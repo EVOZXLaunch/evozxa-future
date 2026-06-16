@@ -1,4 +1,9 @@
-🚀 EVOZXa FUTURE
+<p align="center">
+  <img src="images/logo.png" width="200" alt="EVOZXa FUTURE Logo">
+</p>
+
+<h1 align="center">EVOZXa FUTURE</h1>
+
 
 "EVOZ Network" (https://img.shields.io/badge/Network-EVOZ%20Mainnet-2563eb?style=for-the-badge)
 "Ethers.js" (https://img.shields.io/badge/Ethers.js-v6.13.5-ffd700?style=for-the-badge)
