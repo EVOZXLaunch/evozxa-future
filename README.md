@@ -20,7 +20,6 @@
   A decentralized token launchpad for the EVOZ Network.
 </p>
 
-A decentralized token launchpad for the EVOZ Network.
 
 EVOZXa FUTURE provides a streamlined interface for creating, deploying, and managing customizable EVM-compatible tokens through a web-based application. The platform integrates token deployment, metadata management, wallet connectivity, and smart contract verification into a unified workflow.
 
