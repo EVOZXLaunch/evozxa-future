@@ -107,3 +107,11 @@ evozxa-future-main/
     │
     └── wallet.js
         └── Koneksi wallet (MetaMask/EVM Wallet)
+
+---
+
+License
+
+EVOZXa FUTURE is open-source software released under the MIT License.
+
+Copyright © 2026 EVOZXLabs.
