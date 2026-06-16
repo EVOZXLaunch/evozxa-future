@@ -10,20 +10,17 @@ const connectBtn = document.getElementById("connectBtn");
 
 async function updateWalletUI(wallet) {
     const addrEl = document.getElementById("walletAddress");
-    
     if (!wallet) {
         connectBtn.textContent = "Connect Wallet";
         if (addrEl) addrEl.textContent = "Not Connected";
         localStorage.removeItem("walletConnected");
         return;
     }
-
     const shortAddress = wallet.address.slice(0, 6) + "..." + wallet.address.slice(-4);
     connectBtn.textContent = shortAddress;
     if (addrEl) addrEl.textContent = shortAddress;
     localStorage.setItem("walletConnected", "true");
 
-    // Load balances hanya jika elemen tersebut ada di halaman
     if (document.getElementById("evozBalance")) {
         const balances = await loadBalances(wallet.provider, wallet.address);
         document.getElementById("evozBalance").textContent = Number(balances.evoz).toFixed(4);
@@ -31,7 +28,7 @@ async function updateWalletUI(wallet) {
     }
 }
 
-connectBtn.addEventListener("click", async () => {
+connectBtn?.addEventListener("click", async () => {
     if (localStorage.getItem("walletConnected") === "true") {
         await disconnectWallet();
         updateWalletUI(null);
@@ -45,99 +42,92 @@ connectBtn.addEventListener("click", async () => {
     }
 });
 
-// Auto-reconnect saat halaman dimuat
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Auto-reconnect
     if (localStorage.getItem("walletConnected") === "true") {
         try {
             const wallet = await connectWallet();
             if (wallet) updateWalletUI(wallet);
-        } catch (e) {
-            localStorage.removeItem("walletConnected");
-        }
+        } catch (e) { localStorage.removeItem("walletConnected"); }
+    }
+    // 2. Inisialisasi Event Listener untuk Fee Calculator
+    const tokenForm = document.getElementById("tokenForm");
+    if (tokenForm) {
+        tokenForm.addEventListener("change", updateFee);
+        updateFee(); // Hitung awal
     }
 });
 
 // =========================================================
-// MODAL & FEE LOGIC (STAY SAME)
+// MODAL & FEE LOGIC
 // =========================================================
 const inisialisasiModalAlert = () => {
+    const modal = document.getElementById('customModal');
+    if (!modal) return;
+    
     window.alert = function(message, tokenDetails = null) {
-        const modal = document.getElementById('customModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
         const confirmBtn = document.getElementById('modalConfirmBtn');
-        const modalFooter = modal ? modal.querySelector('.modal-footer') : null;
-
-        if (!modal) return alert(message);
-
-        const oldDownloadBtn = document.getElementById('modalDownloadBtn');
-        if (oldDownloadBtn) oldDownloadBtn.remove();
 
         if (tokenDetails) {
             modalTitle.innerText = "Deployment Success!";
-            modalTitle.style.color = "#00ff88";
-            modalMessage.innerHTML = `
-                <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 10px; margin-bottom: 16px;">
-                    <p><strong>Name:</strong> ${tokenDetails.name}</p>
-                    <p><strong>Address:</strong> ${tokenDetails.address}</p>
-                </div>`;
+            modalTitle.style.color = "#ffd700";
+            modalMessage.innerHTML = `Token <strong>${tokenDetails.name}</strong> berhasil dideploy!<br><br>Address:<br><code>${tokenDetails.address}</code>`;
         } else {
             modalTitle.innerText = "Notice";
+            modalTitle.style.color = "#fff";
             modalMessage.innerText = message;
         }
-
         modal.style.display = 'flex';
         confirmBtn.onclick = () => modal.style.display = 'none';
     };
 };
 inisialisasiModalAlert();
 
-function calculateFee(features) {
-    let fee = 10;
-    if (features.burnable) fee += 2;
-    if (features.mintable) fee += 3;
-    if (features.ownership) fee += 1;
-    if (features.maxWallet || features.maxTx) fee += 4;
-    if (features.tradingControl) fee += 4;
-    if (features.buyTax || features.sellTax) fee += 6;
-    return fee;
-}
-
 function updateFee() {
-    const features = {
-        burnable: document.getElementById("burnable")?.checked,
-        mintable: document.getElementById("mintable")?.checked,
-        ownership: document.getElementById("ownership")?.checked,
-        maxWallet: document.getElementById("maxWallet")?.checked,
-        maxTx: document.getElementById("maxTx")?.checked,
-        tradingControl: document.getElementById("tradingControl")?.checked,
-        buyTax: document.getElementById("buyTax")?.checked,
-        sellTax: document.getElementById("sellTax")?.checked
-    };
-    const total = calculateFee(features);
-    if(document.getElementById("evozxFee")) document.getElementById("evozxFee").textContent = total;
-    if(document.getElementById("evozFee")) document.getElementById("evozFee").textContent = total * 5;
+    const checkboxes = [
+        "burnable", "mintable", "ownership", "maxWallet", 
+        "maxTx", "tradingControl", "buyTax", "sellTax"
+    ];
+    let fee = 10;
+    const features = {};
+    checkboxes.forEach(id => {
+        const el = document.getElementById(id);
+        features[id] = el?.checked;
+        if (el?.checked) {
+            if (["burnable"].includes(id)) fee += 2;
+            else if (["mintable"].includes(id)) fee += 3;
+            else if (["ownership"].includes(id)) fee += 1;
+            else if (["maxWallet", "maxTx"].includes(id)) fee += 4;
+            else if (["tradingControl"].includes(id)) fee += 4;
+            else if (["buyTax", "sellTax"].includes(id)) fee += 6;
+        }
+    });
+    const feeEl = document.getElementById("evozxFee");
+    const valEl = document.getElementById("evozFee");
+    if (feeEl) feeEl.textContent = fee;
+    if (valEl) valEl.textContent = fee * 5;
 }
 
 // =========================================================
-// DEPLOYMENT & DASHBOARD LOGIC
+// DEPLOYMENT
 // =========================================================
 const deployBtn = document.getElementById("deployBtn");
 deployBtn?.addEventListener("click", async () => {
     try {
+        deployBtn.disabled = true;
         const signer = getSigner();
         if(!signer) throw new Error("Connect wallet first");
 
         const factory = await loadFactory(signer);
-        const userAddress = await getAddress();
-        const config = buildTokenConfig(userAddress);
+        const config = buildTokenConfig(getAddress());
         validateConfig(config);
 
         const evozx = await loadEvozx(signer);
         const fee = await factory.getDeploymentFee(config);
         
-        // Approval & Deployment
-        const allowance = await evozx.allowance(userAddress, CONFIG.FACTORY);
+        const allowance = await evozx.allowance(getAddress(), CONFIG.FACTORY);
         if(allowance < fee) await (await evozx.approve(CONFIG.FACTORY, fee)).wait();
         
         const tx = await factory.createToken(config);
@@ -147,19 +137,14 @@ deployBtn?.addEventListener("click", async () => {
             try { return factory.interface.parseLog(l).args.token } catch { return null }
         }).find(a => a);
 
-        const rincianToken = {
-            name: document.getElementById("name").value,
-            symbol: document.getElementById("symbol").value,
-            address: tokenAddress
-        };
-
-        // Simpan ke localStorage untuk Dashboard
         const myTokens = JSON.parse(localStorage.getItem("myTokens") || "[]");
-        myTokens.push(rincianToken);
+        myTokens.push({ name: config.name, symbol: config.symbol, address: tokenAddress });
         localStorage.setItem("myTokens", JSON.stringify(myTokens));
 
-        alert("SUCCESS", rincianToken);
+        alert("SUCCESS", { name: config.name, address: tokenAddress });
     } catch(error) {
         alert(error.message);
+    } finally {
+        deployBtn.disabled = false;
     }
 });
