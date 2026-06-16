@@ -470,3 +470,27 @@ button:hover{
     padding: 20px 16px;
   }
 }
+
+/* =========================
+   FOOTER (The Ancient Seal)
+========================= */
+.dapp-footer {
+  text-align: center;
+  padding: 24px 16px 40px 16px; /* Jarak bawah ekstra agar nyaman di layar HP */
+  margin-top: 16px;
+}
+
+.dapp-footer p {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+/* Efek menyala tipis saat kursor diarahkan ke footer */
+.dapp-footer p:hover {
+  opacity: 1;
+  color: var(--text);
+  text-shadow: 0 0 8px rgba(213, 228, 245, 0.2);
+}
