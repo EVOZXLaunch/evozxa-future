@@ -22,6 +22,11 @@
 <span>EVOZXa FUTURE</span>
 </div>
 
+<nav class="nav-links">
+    <a href="index.html" style="color: var(--gold); margin-right: 20px; font-weight: bold;">Deploy</a>
+    <a href="dashboard.html" style="color: white;">Dashboard</a>
+</nav>
+
 <button id="connectBtn">
 Connect Wallet
 </button>
@@ -68,159 +73,67 @@ on EVOZ Mainnet.
 
 <form id="tokenForm">
 
-<input
-id="name"
-type="text"
-placeholder="Token Name"
-/>
-
-<input
-id="symbol"
-type="text"
-placeholder="Symbol"
-/>
-
-<input
-id="supply"
-type="number"
-placeholder="Total Supply"
-/>
+<input id="name" type="text" placeholder="Token Name" />
+<input id="symbol" type="text" placeholder="Symbol" />
+<input id="supply" type="number" placeholder="Total Supply" />
 
 <div class="features-box">
 <h3>Features</h3>
-
-<label>
-<input type="checkbox" id="burnable">
-Burnable
-</label>
-
-<label>
-<input type="checkbox" id="mintable">
-Mintable
-</label>
-
-<label>
-<input type="checkbox" id="ownership">
-Ownership
-</label>
+<label><input type="checkbox" id="burnable"> Burnable</label>
+<label><input type="checkbox" id="mintable"> Mintable</label>
+<label><input type="checkbox" id="ownership"> Ownership</label>
 </div>
 
 <div class="main-accordion-item">
   <input type="checkbox" id="groupMetadata" class="group-toggle">
-  <label for="groupMetadata" class="main-accordion-header">
-    METADATA
-    <span class="arrow">▼</span>
-  </label>
-  
+  <label for="groupMetadata" class="main-accordion-header">METADATA <span class="arrow">▼</span></label>
   <div class="main-accordion-content">
-    
     <div class="sub-accordion-item">
-      <label> <input type="checkbox" id="website">
-        Website
-      </label>
-      <div class="sub-accordion-content">
-        <input id="websiteUrl" type="text" placeholder="Website URL" />
-      </div>
+      <label><input type="checkbox" id="website"> Website</label>
+      <div class="sub-accordion-content"><input id="websiteUrl" type="text" placeholder="Website URL" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="telegram">
-        Telegram
-      </label>
-      <div class="sub-accordion-content">
-        <input id="telegramUrl" type="text" placeholder="Telegram URL" />
-      </div>
+      <label><input type="checkbox" id="telegram"> Telegram</label>
+      <div class="sub-accordion-content"><input id="telegramUrl" type="text" placeholder="Telegram URL" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="twitter">
-        Twitter
-      </label>
-      <div class="sub-accordion-content">
-        <input id="twitterUrl" type="text" placeholder="Twitter URL" />
-      </div>
+      <label><input type="checkbox" id="twitter"> Twitter</label>
+      <div class="sub-accordion-content"><input id="twitterUrl" type="text" placeholder="Twitter URL" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="logo">
-        Logo
-      </label>
-      <div class="sub-accordion-content">
-        <input id="logoUrl" type="text" placeholder="Logo URL" />
-      </div>
+      <label><input type="checkbox" id="logo"> Logo</label>
+      <div class="sub-accordion-content"><input id="logoUrl" type="text" placeholder="Logo URL" /></div>
     </div>
-
   </div>
 </div>
 
 <div class="main-accordion-item">
   <input type="checkbox" id="groupAdvanced" class="group-toggle">
-  <label for="groupAdvanced" class="main-accordion-header">
-    ADVANCED SETTINGS
-    <span class="arrow">▼</span>
-  </label>
-  
+  <label for="groupAdvanced" class="main-accordion-header">ADVANCED SETTINGS <span class="arrow">▼</span></label>
   <div class="main-accordion-content">
-    
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="maxWallet">
-        Max Wallet
-      </label>
-      <div class="sub-accordion-content">
-        <input id="maxWalletValue" type="number" placeholder="Max Wallet %" />
-      </div>
+      <label><input type="checkbox" id="maxWallet"> Max Wallet</label>
+      <div class="sub-accordion-content"><input id="maxWalletValue" type="number" placeholder="Max Wallet %" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="maxTx">
-        Max TX
-      </label>
-      <div class="sub-accordion-content">
-        <input id="maxTxValue" type="number" placeholder="Max TX %" />
-      </div>
+      <label><input type="checkbox" id="maxTx"> Max TX</label>
+      <div class="sub-accordion-content"><input id="maxTxValue" type="number" placeholder="Max TX %" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="tradingControl">
-        Trading Control
-      </label>
-      <div class="sub-accordion-content">
-        <p style="font-size: 13px; color: var(--muted); margin-bottom: 14px; font-style: italic; padding: 0 4px;">
-          * Enables pausing/unpausing contract transactions.
-        </p>
-      </div>
+      <label><input type="checkbox" id="tradingControl"> Trading Control</label>
+      <div class="sub-accordion-content"><p style="font-size: 13px; color: var(--muted); margin-bottom: 14px; font-style: italic;">* Enables pausing/unpausing contract transactions.</p></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="buyTax">
-        Buy Tax
-      </label>
-      <div class="sub-accordion-content">
-        <input id="buyTaxValue" type="number" placeholder="Buy Tax %" />
-      </div>
+      <label><input type="checkbox" id="buyTax"> Buy Tax</label>
+      <div class="sub-accordion-content"><input id="buyTaxValue" type="number" placeholder="Buy Tax %" /></div>
     </div>
-
     <div class="sub-accordion-item">
-      <label>
-        <input type="checkbox" id="sellTax">
-        Sell Tax
-      </label>
-      <div class="sub-accordion-content">
-        <input id="sellTaxValue" type="number" placeholder="Sell Tax %" />
-      </div>
+      <label><input type="checkbox" id="sellTax"> Sell Tax</label>
+      <div class="sub-accordion-content"><input id="sellTaxValue" type="number" placeholder="Sell Tax %" /></div>
     </div>
-
     <input id="burnTaxShare" type="number" placeholder="Burn Tax Share %" style="margin-top: 8px;" />
     <input id="marketingWallet" type="text" placeholder="Marketing Wallet" />
     <input id="developmentWallet" type="text" placeholder="Development Wallet" />
-
   </div>
 </div>
 
@@ -233,22 +146,11 @@ Ownership
 <h2>Deployment Summary</h2>
 
 <div id="summary">
-
-<div class="summary-row">
-<span>Total EVOZX Fee</span>
-<strong id="evozxFee">10</strong>
+<div class="summary-row"><span>Total EVOZX Fee</span><strong id="evozxFee">10</strong></div>
+<div class="summary-row"><span>Total EVOZ Value</span><strong id="evozFee">50</strong></div>
 </div>
 
-<div class="summary-row">
-<span>Total EVOZ Value</span>
-<strong id="evozFee">50</strong>
-</div>
-
-</div>
-
-<button id="deployBtn">
-Deploy Token
-</button>
+<button id="deployBtn">Deploy Token</button>
 
 </section>
 
@@ -264,20 +166,12 @@ Deploy Token
 
 <div id="customModal" class="modal-overlay" style="display: none;">
   <div class="modal-box">
-    <div class="modal-header">
-      <h3 id="modalTitle" class="modal-title">Notice</h3>
-    </div>
-    <div class="modal-body">
-      <p id="modalMessage" class="modal-text">Default message...</p>
-    </div>
-    <div class="modal-footer">
-      <button id="modalConfirmBtn" class="modal-btn">Confirm</button>
-    </div>
+    <div class="modal-header"><h3 id="modalTitle" class="modal-title">Notice</h3></div>
+    <div class="modal-body"><p id="modalMessage" class="modal-text">Default message...</p></div>
+    <div class="modal-footer"><button id="modalConfirmBtn" class="modal-btn">Confirm</button></div>
   </div>
 </div>
 
 <script type="module" src="./js/app.js"></script>
-<script type="module" src="./js/main.js"></script>
-
 </body>
 </html>
