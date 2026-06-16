@@ -201,6 +201,38 @@ function draw() {
 
 setInterval(draw, 33);
 </script>
+
+<script>
+/* =========================
+   AI TYPING EFFECT
+========================= */
+const heroText = document.getElementById("heroText");
+
+const text = "Create Professional Tokens On EVOZ";
+let i = 0;
+
+heroText.textContent = "";
+
+function type(){
+if(i < text.length){
+heroText.textContent += text.charAt(i);
+i++;
+setTimeout(type, 60);
+}
+}
+
+type();
+
+/* =========================
+   STATUS PULSE (SIMULATED)
+========================= */
+const statusText = document.getElementById("statusText");
+
+setInterval(() => {
+const states = ["SYSTEM READY", "SYNCING CHAIN...", "WALLET SCANNED", "NETWORK STABLE"];
+statusText.textContent = states[Math.floor(Math.random()*states.length)];
+}, 3000);
+</script>
   
 </body>
 </html>
