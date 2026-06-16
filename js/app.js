@@ -229,7 +229,12 @@ deployBtn.addEventListener("click", async () => {
         }
 
         const factory = await loadFactory(signer);
-        const config = buildTokenConfig(getAddress());
+        
+        // --- FIX SECURE DI SINI ---
+        const userAddress = await getAddress();
+        const config = buildTokenConfig(userAddress); 
+        // --------------------------
+        
         validateConfig(config);
 
         console.log("CONFIG", config);
@@ -241,12 +246,12 @@ deployBtn.addEventListener("click", async () => {
         const fee = await factory.getDeploymentFee(config);
         console.log("DEPLOY FEE", fee.toString());
 
-        const balance = await evozx.balanceOf(getAddress());
+        const balance = await evozx.balanceOf(userAddress);
         if(balance < fee){
             throw new Error("Insufficient EVOZX balance");
         }
 
-        const allowance = await evozx.allowance(getAddress(), CONFIG.FACTORY);
+        const allowance = await evozx.allowance(userAddress, CONFIG.FACTORY);
         if(allowance < fee){
             console.log("Approving EVOZX...");
             const approveTx = await evozx.approve(CONFIG.FACTORY, fee);
@@ -288,4 +293,3 @@ deployBtn.addEventListener("click", async () => {
         alert(error.message);
     }
 });
-            
