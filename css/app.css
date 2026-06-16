@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Alkimia Warna Baru (Wizard Theme) */
-  --bg: #090514;                /* Void / Kehampaan */
-  --surface: #130a26;           /* Kamar Penyihir / Scroll */
-  --surface-2: #1b1035;         /* Inti Mana Pekat */
-  --border: rgba(138, 43, 226, 0.3); /* Garis Energi Mana */
+  /* Alkimia Warna Baru (Wizard Theme - Frost & Blue Mana) */
+  --bg: #040814;                /* Void Biru Gelap Peat */
+  --surface: #0a1126;           /* Kamar Penyihir / Scroll Biru */
+  --surface-2: #101b35;         /* Inti Mana Biru Pekat */
+  --border: rgba(37, 99, 235, 0.35); /* Garis Energi Mana Biru (Menggunakan Blue Base) */
 
   --gold: #ffd700;              /* Rune Emas Kuno */
-  --blue: #8a2be2;              /* Ungu Mana Murni */
+  --blue: #2563eb;              /* Biru Mana Murni */
 
-  --text: #e0d5f5;              /* Tulisan Perak Mistis */
-  --muted: #a395be;             /* Tulisan Kabur / Debu Buku */
+  --text: #d5e4f5;              /* Tulisan Perak Kebiruan Mistis */
+  --muted: #8fa0be;             /* Tulisan Kabur / Debu Buku Kebiruan */
 
   --glow-gold: 0 0 10px rgba(255, 215, 0, 0.35);
-  --glow-blue: 0 0 15px rgba(138, 43, 226, 0.5);
+  --glow-blue: 0 0 15px rgba(37, 99, 235, 0.5); /* Pendaran Sihir Biru */
 }
 
 /* =========================
@@ -28,10 +28,10 @@
 
 body{
   background: var(--bg);
-  /* Efek aura magis di latar belakang */
+  /* Efek aura magis biru di latar belakang */
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(0, 191, 255, 0.08) 0%, transparent 40%);
+    radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 191, 255, 0.1) 0%, transparent 40%);
   color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
@@ -47,7 +47,7 @@ body{
   padding: 16px 24px;
   position: sticky;
   top: 0;
-  background: rgba(9, 5, 20, 0.88);
+  background: rgba(4, 8, 20, 0.88);
   backdrop-filter: blur(12px);
   border-bottom: 2px solid var(--blue);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
@@ -86,11 +86,11 @@ body{
 
 .hero{
   margin-bottom: 40px;
-  background: rgba(27, 16, 53, 0.3);
+  background: rgba(16, 27, 53, 0.3);
   padding: 32px;
   border-radius: 16px;
-  border: 1px solid rgba(138, 43, 226, 0.15);
-  box-shadow: inset 0 0 25px rgba(138, 43, 226, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  box-shadow: inset 0 0 25px rgba(37, 99, 235, 0.15);
   text-align: center;
 }
 
@@ -161,7 +161,7 @@ input{
   padding: 14px 16px;
   background: var(--surface-2);
   color: #ffffff;
-  border: 1px solid rgba(138, 43, 226, 0.4);
+  border: 1px solid rgba(37, 99, 235, 0.4);
   border-radius: 8px;
   transition: .2s ease;
   font-size: 14px;
@@ -169,14 +169,14 @@ input{
 }
 
 input::placeholder{
-  color: rgba(163, 149, 190, 0.6);
+  color: rgba(143, 160, 190, 0.6);
 }
 
 input:focus{
   outline: none;
   border: 1px solid var(--gold);
   box-shadow: var(--glow-gold), inset 0 0 8px rgba(255, 215, 0, 0.1);
-  background: #221442;
+  background: #152447;
 }
 
 /* =========================
@@ -187,7 +187,7 @@ button{
   border: none;
   padding: 14px 20px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #30114d, var(--surface-2));
+  background: linear-gradient(135deg, #0f2454, var(--surface-2));
   color: #ffffff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
@@ -202,13 +202,13 @@ button{
 button:hover{
   border-color: var(--gold);
   color: var(--gold);
-  box-shadow: var(--glow-gold), 0 0 15px rgba(138, 43, 226, 0.3);
+  box-shadow: var(--glow-gold), 0 0 15px rgba(37, 99, 235, 0.3);
   transform: translateY(-2px);
 }
 
 /* deploy button special accent (The Ultimate Summoning) */
 #deployBtn{
-  background: linear-gradient(135deg, var(--blue), #41006f);
+  background: linear-gradient(135deg, var(--blue), #0b2566);
   border: 1px solid var(--gold);
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   box-shadow: var(--glow-blue);
@@ -216,7 +216,7 @@ button:hover{
 
 #deployBtn:hover{
   border-color: #ffffff;
-  box-shadow: 0 0 25px #bf55ec, var(--glow-gold);
+  box-shadow: 0 0 25px #3b82f6, var(--glow-gold);
   color: #ffffff;
 }
 
@@ -287,17 +287,17 @@ button:hover{
   gap: 10px;
   padding: 11px 14px;
   border-radius: 8px;
-  border: 1px solid rgba(138, 43, 226, 0.2);
-  background: rgba(19, 10, 38, 0.6);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  background: rgba(10, 17, 38, 0.6);
   cursor: pointer;
   transition: .2s;
-  color: #c3b9d9;
+  color: #b9cad9;
   font-weight: 500;
 }
 
 .features-box label:hover{
   border-color: var(--blue);
-  background: rgba(138, 43, 226, 0.1);
+  background: rgba(37, 99, 235, 0.1);
   color: #fff;
 }
 
@@ -319,7 +319,7 @@ button:hover{
   padding-bottom: 8px;
   font-size: 14px;
   color: var(--muted);
-  border-bottom: 1px dashed rgba(138, 43, 226, 0.2);
+  border-bottom: 1px dashed rgba(37, 99, 235, 0.3);
 }
 
 .summary-row strong{
@@ -339,8 +339,8 @@ button:hover{
 }
 
 .blue{
-  color: #a855f7; /* Ungu terang untuk aksen teks dinamis */
-  text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  color: #38bdf8; /* Biru terang menyala untuk teks penanda dinamis */
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
 }
 
 /* Tambahan space khusus elemen advanced */
