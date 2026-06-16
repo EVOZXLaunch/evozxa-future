@@ -1,71 +1,76 @@
-# Contract Verification Guide
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Guide | EVOZXa FUTURE</title>
+    <link rel="stylesheet" href="./css/app.css">
+    <style>
+        .guide-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            border-radius: 12px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+        h1, h2 { color: var(--gold); }
+        code { background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #444; padding: 10px; text-align: left; }
+        th { background: #222; }
+        .download-btn { display: inline-block; padding: 10px 20px; background: var(--gold); color: black; text-decoration: none; font-weight: bold; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
 
-This guide explains the steps to verify token contracts that have been deployed via **EVOZXa FUTURE**. Verification ensures that the *source code* published in the *blockchain explorer* mathematically matches the *bytecode* of the deployed contract, increasing transparency and trust for your community.
+<div id="app">
+    <header class="topbar">
+        <div class="brand">
+            <img src="./images/logo.png" alt="EVOZXa">
+            <span>EVOZXa FUTURE</span>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" style="color: white;">Back to Deploy</a>
+        </nav>
+    </header>
 
----
+    <main class="container">
+        <div class="guide-container">
+            <h1>Contract Verification Guide</h1>
+            <p>This guide explains the steps to verify token contracts that have been deployed via <b>EVOZXa FUTURE</b>. Verification ensures that the source code published in the blockchain explorer mathematically matches the bytecode of the deployed contract, increasing transparency and trust for your community.</p>
 
-## 1. Compiler Configuration (Required)
-When verifying, you must use the following *compiler* settings exactly. If there is a parameter mismatch, the verification process will fail.
+            <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
 
-| Parameters | Value |
-| :--- | :--- |
-| **Compiler Version** | `0.8.34` |
-| **Optimization** | Enabled |
-| **Optimizer Runs** | `200` |
-| **EVM Version** | `Paris` |
-| **Verification Method** | Solidity (Standard JSON Input) |
+            <h2>1. Compiler Configuration (Required)</h2>
+            <p>When verifying, you must use the following compiler settings exactly:</p>
+            <table>
+                <tr><th>Parameters</th><th>Value</th></tr>
+                <tr><td>Compiler Version</td><td>0.8.34</td></tr>
+                <tr><td>Optimization</td><td>Enabled</td></tr>
+                <tr><td>Optimizer Runs</td><td>200</td></tr>
+                <tr><td>EVM Version</td><td>Paris</td></tr>
+                <tr><td>Verification Method</td><td>Solidity (Standard JSON Input)</td></tr>
+            </table>
 
-> **Warning:** These settings must be identical to the configuration used during the *deployment* process.
+            <h2>2. Verification Steps</h2>
+            <p><b>Step 1:</b> Open <b>EVOZ Explorer</b> and navigate to your deployed token contract address.</p>
+            <p><b>Step 2:</b> Click the <b>"Verify Contract"</b> button on the contract page.</p>
+            <p><b>Step 3:</b> Choose <b>"Solidity (Standard JSON Input)"</b> as the method.</p>
+            <p><b>Step 4:</b> Configure compiler settings exactly as shown in the table above.</p>
+            <p><b>Step 5:</b> Upload the <code>standard-input.json</code> file.</p>
+            <a href="https://github.com/EVOZXLaunch/evozxa-future/raw/main/assets/standard-input.json" download="standard-input.json" target="_blank" class="download-btn">Download standard-input.json</a>
+            
+            <h2>3. Verification Results</h2>
+            <p>Verification is successful if the compiler settings and JSON input are valid and match the deployed bytecode. Once verified, the source code will be publicly visible on the explorer.</p>
 
----
+            <h2>4. Troubleshooting</h2>
+            <p>If verification fails, ensure you selected compiler version <code>0.8.34</code> and the <code>Paris</code> EVM version. If problems persist, contact our support team.</p>
+        </div>
+    </main>
+</div>
 
-## 2. Verification Steps
-
-**Step 1: Access Your Contract**
-Open **EVOZ Explorer** and navigate to your deployed token contract address.
-
-**Step 2: Initiate Verification**
-On the contract page, click the **"Verify Contract"** button.
-
-**Step 3: Select Verification Method**
-In the method selection menu, choose: **"Solidity (Standard JSON Input)"**.
-
-**Step 4: Compiler Configuration**
-Enter the parameters according to the **Compiler Configuration** table above.
-
-**Step 5: Upload JSON Standard Input File**
-Upload the `standard-input.json` file provided in the *Verification Package*. 
-* Download the latest version here: 
-  <a href="https://github.com/EVOZXLaunch/evozxa-future/raw/main/assets/standard-input.json" download="standard-input.json" target="_blank">Download standard-input.json</a>
-
-> *Note: If the file opens as text in your browser, right-click the link above and select "Save Link As..." or "Save Target As..." to download it directly.*
-
-**Step 6: Submit Verification**
-Click the **"Submit"** button. The explorer will recompile the *source code* and compare the *bytecode* against the active contract on the *chain*.
-
----
-
-## 3. Verification Results
-Verification is successful if:
-* The compiler version and optimization settings match.
-* The *JSON Standard Input* is valid and matches the *source code*.
-
-Once successful, your contract's *source code* and *metadata* will be publicly visible on the *explorer*, signifying that your contract is officially verified.
-
----
-
-## 4. Verification Package
-The official verification package from EVOZXa FUTURE includes:
-1. `LaunchKitToken.sol` (Primary Contract)
-2. `LaunchKitTypes.sol` (Contract Library)
-3. `standard-input.json` (Compilation Manifest)
-
----
-
-## 5. Help & Troubleshooting
-If verification fails, double-check the following:
-* **Compiler Version:** Ensure you selected `0.8.34`.
-* **Standard Input:** Ensure you have not modified the contents of the downloaded `.json` file.
-* **EVM Version:** Ensure `Paris` is selected.
-
-If the problem persists, please contact our support team via our official channels.
+</body>
+</html>
