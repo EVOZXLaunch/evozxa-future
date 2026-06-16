@@ -1,64 +1,38 @@
 import { CONFIG } from "./config.js";
 
-export async function loadExchange(
-    signer
-){
+// Cache untuk ABI
+let exchangeAbiCache = null;
 
-    const abi =
-        await fetch(
-            "./abi/exchange.json"
-        ).then(
-            r => r.json()
-        );
-
-    return new ethers.Contract(
-        CONFIG.EXCHANGE,
-        abi,
-        signer
-    );
-
+async function getExchangeABI() {
+    if (!exchangeAbiCache) {
+        const response = await fetch("./abi/exchange.json");
+        exchangeAbiCache = await response.json();
+    }
+    return exchangeAbiCache;
 }
 
-export async function getRate(
-    signer
-){
+export async function loadExchange(signer) {
+    const abi = await getExchangeABI();
+    return new ethers.Contract(CONFIG.EXCHANGE, abi, signer);
+}
 
-    const exchange =
-        await loadExchange(
-            signer
-        );
-
+export async function getRate(signer) {
+    const exchange = await loadExchange(signer);
     return await exchange.rate();
-
 }
 
-export async function buyMissingEVOZX(
-    signer,
-    missingAmountWei
-){
+export async function buyMissingEVOZX(signer, missingAmountWei) {
+    const exchange = await loadExchange(signer);
+    
+    // Pastikan rate diambil dengan benar (asumsi rate dalam format yang sesuai dengan SC Anda)
+    const rate = await exchange.rate();
+    const evozRequiredWei = BigInt(missingAmountWei) * BigInt(rate);
 
-    const exchange =
-        await loadExchange(
-            signer
-        );
-
-    const rate =
-        await exchange.rate();
-
-    const evozRequiredWei =
-        missingAmountWei *
-        rate;
-
-    const tx =
-        await exchange.buyEVOZX({
-
-            value:
-            evozRequiredWei
-
-        });
+    // Kirim transaksi dengan value yang diperlukan
+    const tx = await exchange.buyEVOZX({
+        value: evozRequiredWei
+    });
 
     await tx.wait();
-
     return tx.hash;
-
 }
