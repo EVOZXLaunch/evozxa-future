@@ -1,30 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tokenList = document.getElementById('tokenList');
     const noTokens = document.getElementById('noTokens');
-    const myTokens = JSON.parse(localStorage.getItem("myTokens") || "[]");
+    
+    // Ambil data dengan aman
+    let myTokens = [];
+    try {
+        myTokens = JSON.parse(localStorage.getItem("myTokens") || "[]");
+    } catch (e) {
+        console.error("Gagal memuat data token:", e);
+    }
 
-    if (myTokens.length === 0) {
-        noTokens.style.display = 'block';
+    if (!myTokens || myTokens.length === 0) {
+        if (noTokens) noTokens.style.display = 'block';
         return;
     }
 
-    myTokens.forEach((token, index) => {
+    // Gunakan DocumentFragment untuk performa lebih baik
+    const fragment = document.createDocumentFragment();
+
+    myTokens.forEach((token) => {
         const row = document.createElement('tr');
+        // Sanitasi input dasar agar aman
+        const name = token.name || "Unknown";
+        const symbol = token.symbol || "---";
+        const addr = token.address || "";
+        const shortAddr = addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "Invalid Address";
+
         row.innerHTML = `
-            <td>${token.name}</td>
-            <td>${token.symbol}</td>
-            <td><code>${token.address.slice(0, 6)}...${token.address.slice(-4)}</code></td>
+            <td>${name}</td>
+            <td>${symbol}</td>
+            <td><code>${shortAddr}</code></td>
             <td>
-                <button onclick="copyToClipboard('${token.address}')" style="padding: 5px 10px; font-size: 12px; margin-right: 5px;">Copy</button>
-                <a href="verification-guide.html" style="padding: 5px 10px; font-size: 12px; background: var(--blue); color: #fff; text-decoration: none; border-radius: 8px;">Verify</a>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn-copy" onclick="copyToClipboard('${addr}')">Copy</button>
+                    <a href="verification-guide.html" class="btn-verify">Verify</a>
+                </div>
             </td>
         `;
-        tokenList.appendChild(row);
+        fragment.appendChild(row);
     });
+
+    if (tokenList) tokenList.appendChild(fragment);
 });
 
-// Helper fungsi untuk copy address
-window.copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    alert("Address copied to clipboard!");
+// Helper fungsi yang lebih modern
+window.copyToClipboard = async (text) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        // Feedback visual (opsional: bisa tambahkan toast/notifikasi)
+        console.log("Alamat disalin!");
+    } catch (err) {
+        console.error("Gagal menyalin:", err);
+    }
 };
