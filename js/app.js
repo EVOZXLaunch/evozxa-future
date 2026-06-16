@@ -5,14 +5,30 @@ import { loadFactory, loadEvozx, buildTokenConfig, validateConfig } from "./depl
 import { CONFIG } from "./config.js";
 
 // =========================================================
-// 1. UI: ACCORDION TOGGLE (FIXED)
+// 1. UI: ACCORDION & INPUT TOGGLE (FIXED)
 // =========================================================
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('main-accordion-header')) {
-        const content = e.target.nextElementSibling;
-        content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+
+// Toggle Accordion Utama (Metadata/Advanced)
+window.toggleAcc = function(el) {
+    const content = el.nextElementSibling;
+    content.style.display = (content.style.display === "block") ? "none" : "block";
+};
+
+// Toggle Tampil/Sembunyi Input saat Checkbox dicentang
+window.toggleInput = function(checkbox) {
+    const wrapper = checkbox.closest('.feature-wrapper');
+    const input = wrapper.querySelector('.hidden-input');
+    
+    if (checkbox.checked) {
+        input.style.display = "block";
+        input.disabled = false;
+    } else {
+        input.style.display = "none";
+        input.disabled = true;
+        input.value = ""; // Reset nilai saat uncheck
     }
-});
+    updateFee(); // Hitung ulang fee saat ada perubahan
+};
 
 // =========================================================
 // 2. WALLET & UI LOGIC
@@ -40,21 +56,22 @@ connectBtn.addEventListener("click", async () => {
 // =========================================================
 // 3. FEE CALCULATOR
 // =========================================================
-const featureIds = ["burnable", "mintable", "ownership", "maxWallet", "maxTx", "tradingControl", "buyTax", "sellTax"];
-const metaIds = ["websiteUrl", "telegramUrl", "twitterUrl", "logoUrl"];
-
 function updateFee() {
     const features = {};
     
-    // Check Metadata
-    metaIds.forEach(id => {
-        const key = id.replace('Url', '');
-        features[key] = document.getElementById(id)?.value.trim() !== "";
+    // Ambil semua checkbox fitur utama
+    const featureIds = ["burnable", "mintable", "ownership", "maxWallet", "maxTx", "tradingControl", "buyTax", "sellTax"];
+    featureIds.forEach(id => {
+        const el = document.getElementById(id);
+        features[id] = el ? el.checked : false;
     });
 
-    // Check Features
-    featureIds.forEach(id => {
-        features[id] = document.getElementById(id)?.checked;
+    // Ambil status Metadata/Advanced (cek apakah input aktif/punya value)
+    const inputs = document.querySelectorAll('.hidden-input');
+    inputs.forEach(input => {
+        if (!input.disabled && input.value.trim() !== "") {
+            features[input.id.replace('Url', '').replace('Value', '')] = true;
+        }
     });
 
     const total = calculateFee(features);
@@ -62,9 +79,10 @@ function updateFee() {
     document.getElementById("evozFee").textContent = total * 5;
 }
 
-// Event Listeners for Fees
-featureIds.forEach(id => document.getElementById(id)?.addEventListener("change", updateFee));
-metaIds.forEach(id => document.getElementById(id)?.addEventListener("input", updateFee));
+// Event Listeners umum
+document.addEventListener("change", (e) => { if (e.target.type === "checkbox") updateFee(); });
+document.addEventListener("input", (e) => { if (e.target.type === "text" || e.target.type === "number") updateFee(); });
+
 updateFee();
 
 // =========================================================
@@ -74,7 +92,7 @@ const deployBtn = document.getElementById("deployBtn");
 
 deployBtn.addEventListener("click", async () => {
     try {
-        deployBtn.disabled = true; // Prevent double click
+        deployBtn.disabled = true;
         const signer = getSigner();
         if(!signer) throw new Error("Connect wallet first");
 
