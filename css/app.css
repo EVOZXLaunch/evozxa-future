@@ -1,66 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
 :root {
-  --bg: #040814;                
-  --surface: #0a1126;           
-  --surface-2: #101b35;         
-  --border: rgba(37, 99, 235, 0.35); 
-  --gold: #ffd700;              
-  --blue: #2563eb;              
-  --text: #d5e4f5;              
-  --muted: #8fa0be;             
-  --glow-gold: 0 0 10px rgba(255, 215, 0, 0.35);
-  --glow-blue: 0 0 15px rgba(37, 99, 235, 0.5); 
+    --bg: #05070d;
+    --surface: #0d1320;
+    --border: #1e293b;
+    --gold: #d4af37;
+    --blue: #2563eb;
+    --text: #ffffff;
+    --muted: #94a3b8;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  overflow-x: hidden;
-  line-height: 1.5;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Header & Nav */
-.topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; position: sticky; top: 0; background: rgba(4, 8, 20, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--blue); z-index: 100; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+/* Layout Utama */
+.container { max-width: 1200px; margin: auto; padding: 24px; }
+.grid { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
+
+/* Topbar */
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(5, 7, 13, .95); backdrop-filter: blur(12px); z-index: 100; }
 .brand { display: flex; align-items: center; gap: 12px; }
-.brand img { width: 32px; height: 32px; }
-.brand span { font-size: 16px; font-weight: 700; color: var(--gold); }
-.nav-links a { text-decoration: none; color: var(--text); font-size: 14px; margin-left: 15px; }
 
-/* Main Layout */
-.container { width: 95%; max-width: 1200px; margin: auto; padding: 20px 0; }
-.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: start; }
+/* Kartu & Input */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+input { width: 100%; margin-top: 12px; padding: 14px; background: #111827; color: white; border: 1px solid var(--border); border-radius: 12px; }
+input:focus { outline: none; border-color: var(--gold); }
 
-/* Cards & Accordion Styling */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-.card h2 { color: var(--gold); font-size: 18px; margin-bottom: 15px; }
-
-/* FIX: Accordion CSS yang stabil */
+/* Fungsionalitas Accordion (PENTING) */
 .main-accordion-header { 
-    display: block; width: 100%; padding: 12px; background: var(--surface-2); 
-    border-radius: 8px; margin-top: 10px; cursor: pointer; font-weight: 600; 
-    border: 1px solid var(--border); transition: 0.3s;
+    background: #1e293b; padding: 14px; border-radius: 12px; margin-top: 15px; 
+    cursor: pointer; display: flex; justify-content: space-between; font-weight: 700; 
+    border: 1px solid var(--border); color: var(--gold);
 }
 .main-accordion-content { display: none; padding: 10px 0; }
-.main-accordion-header:hover { border-color: var(--gold); }
 
-/* Inputs & Buttons */
-input { width: 100%; margin-bottom: 10px; padding: 12px; background: var(--surface-2); color: #fff; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
-button { cursor: pointer; width: 100%; padding: 12px; border-radius: 8px; background: var(--blue); color: #fff; font-weight: 700; border: none; }
-#deployBtn { background: linear-gradient(135deg, var(--blue), #0b2566); border: 1px solid var(--gold); }
+/* Features & Checkboxes */
+.features-box { margin-top: 24px; }
+.features-box label { 
+    display: flex; align-items: center; gap: 12px; padding: 10px 0; 
+    cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.features-box input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
 
-/* Wallet & Footer */
-.wallet-info { margin-top: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.wallet-item { background: var(--surface-2); padding: 10px; border-radius: 8px; text-align: center; font-size: 11px; }
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-.modal-box { background: var(--surface); padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid var(--border); }
+/* Mobile Responsive */
+@media(max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 34px; }
+    .wallet-info { grid-template-columns: 1fr; }
+}
 
-/* MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; }
-  .topbar { flex-direction: column; gap: 10px; }
-  .wallet-info { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 24px; }
+button { 
+    cursor: pointer; border: none; padding: 14px 18px; border-radius: 12px; 
+    background: linear-gradient(135deg, var(--gold), var(--blue)); color: white; font-weight: 700; width: 100%;
 }
