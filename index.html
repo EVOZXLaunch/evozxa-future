@@ -33,47 +33,35 @@
             <section class="card">
                 <h2>Token Configuration</h2>
                 <form id="tokenForm">
-                    <input id="name" type="text" placeholder="Token Name">
-                    <input id="symbol" type="text" placeholder="Symbol">
-                    <input id="supply" type="number" placeholder="Total Supply">
+    <input id="name" type="text" placeholder="Token Name">
+    <input id="symbol" type="text" placeholder="Symbol">
+    <input id="supply" type="number" placeholder="Total Supply">
 
-                    <div class="features-box">
-                        <h3>Features</h3>
-                        <div class="feature-grid">
-                            <label><input type="checkbox" id="burnable"> Burnable</label>
-                            <label><input type="checkbox" id="mintable"> Mintable</label>
-                            <label><input type="checkbox" id="ownership"> Ownership</label>
-                            <label><input type="checkbox" id="maxWallet"> Max Wallet</label>
-                            <label><input type="checkbox" id="maxTx"> Max TX</label>
-                            <label><input type="checkbox" id="tradingControl"> Trading Control</label>
-                            <label><input type="checkbox" id="buyTax"> Buy Tax</label>
-                            <label><input type="checkbox" id="sellTax"> Sell Tax</label>
-                        </div>
-                    </div>
+    <div class="features-box">
+        <h3>Features</h3>
+        <div class="checkbox-grid">
+            <label><input type="checkbox" id="burnable"> Burnable</label>
+            <label><input type="checkbox" id="mintable"> Mintable</label>
+            <label><input type="checkbox" id="ownership"> Ownership</label>
+            <label><input type="checkbox" id="maxWallet"> Max Wallet</label>
+            <label><input type="checkbox" id="maxTx"> Max TX</label>
+            <label><input type="checkbox" id="tradingControl"> Trading Control</label>
+            <label><input type="checkbox" id="buyTax"> Buy Tax</label>
+            <label><input type="checkbox" id="sellTax"> Sell Tax</label>
+        </div>
+    </div>
 
-                    <div class="accordion-item">
-                        <div class="main-accordion-header">METADATA ▼</div>
-                        <div class="main-accordion-content">
-                            <input id="websiteUrl" type="text" placeholder="Website URL">
-                            <input id="telegramUrl" type="text" placeholder="Telegram URL">
-                            <input id="twitterUrl" type="text" placeholder="Twitter URL">
-                            <input id="logoUrl" type="text" placeholder="Logo URL">
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <div class="main-accordion-header">ADVANCED SETTINGS ▼</div>
-                        <div class="main-accordion-content">
-                            <input id="buyTaxValue" type="number" placeholder="Buy Tax %">
-                            <input id="sellTaxValue" type="number" placeholder="Sell Tax %">
-                            <input id="maxWalletValue" type="number" placeholder="Max Wallet %">
-                            <input id="maxTxValue" type="number" placeholder="Max TX %">
-                            <input id="burnTaxShare" type="number" placeholder="Burn Tax Share %">
-                            <input id="marketingWallet" type="text" placeholder="Marketing Wallet">
-                            <input id="developmentWallet" type="text" placeholder="Development Wallet">
-                        </div>
-                    </div>
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAcc(this)">METADATA ▼</div>
+        <div class="accordion-content">
+            <input id="websiteUrl" type="text" placeholder="Website URL">
+            <input id="telegramUrl" type="text" placeholder="Telegram URL">
+            <input id="twitterUrl" type="text" placeholder="Twitter URL">
+            <input id="logoUrl" type="text" placeholder="Logo URL">
+        </div>
+    </div>
                 </form>
+                
             </section>
 
             <section class="card">
