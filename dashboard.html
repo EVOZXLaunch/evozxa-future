@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | EVOZXa FUTURE</title>
     <link rel="stylesheet" href="./css/app.css">
+    <style>
+        /* Penyesuaian khusus tabel agar responsif */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        @media(max-width: 600px) {
+            th:nth-child(1), td:nth-child(1) { display: none; } /* Sembunyikan Nama di mobile jika terlalu sempit */
+        }
+    </style>
 </head>
 <body>
 
@@ -14,8 +23,8 @@
         <span>EVOZXa FUTURE</span>
     </div>
     <nav class="nav-links">
-        <a href="index.html">Deploy</a>
-        <a href="dashboard.html" style="color: var(--gold); font-weight: bold;">Dashboard</a>
+        <a href="index.html" style="color: var(--text); text-decoration: none; margin-right: 15px;">Deploy</a>
+        <a href="dashboard.html" style="color: var(--gold); font-weight: bold; text-decoration: none;">Dashboard</a>
     </nav>
 </header>
 
@@ -26,19 +35,21 @@
     </section>
 
     <section class="card">
-        <table id="tokenTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Symbol</th>
-                    <th>Address</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="tokenList">
+        <div style="overflow-x: auto;">
+            <table id="tokenTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Symbol</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tokenList">
                 </tbody>
-        </table>
-        <div id="noTokens" style="text-align: center; padding: 20px; color: var(--muted); display: none;">
+            </table>
+        </div>
+        <div id="noTokens" style="text-align: center; padding: 40px; color: var(--muted); display: none;">
             No tokens found. Deploy one first!
         </div>
     </section>
