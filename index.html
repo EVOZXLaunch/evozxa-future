@@ -7,26 +7,21 @@
     <link rel="stylesheet" href="./css/app.css">
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
     <style>
-        /* CSS Tambahan untuk Memperbaiki Layout Responsif */
-        body { margin: 0; padding: 0; overflow-x: hidden; }
-        .grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .card { width: 100%; box-sizing: border-box; }
-        input { width: 100% !important; box-sizing: border-box; margin-bottom: 10px; }
+        /* FIX: Paksa accordion tersembunyi secara default */
+        .main-accordion-content, .sub-accordion-content { display: none; }
         
-        /* Mobile Layout */
+        /* FIX: Layout Grid agar tidak berantakan di HP */
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Mobile Breakpoint */
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
-            .topbar { flex-direction: column; text-align: center; }
-            .hero { text-align: center; }
-            .wallet-info { flex-direction: column; }
+            .topbar { flex-direction: column; gap: 10px; }
         }
+        
+        /* Styling tambahan agar rapi */
+        .main-accordion-header { cursor: pointer; display: block; padding: 10px; background: rgba(255,255,255,0.05); margin-top: 10px; border-radius: 8px; }
+        .sub-accordion-item { margin-top: 8px; padding-left: 10px; }
     </style>
 </head>
 <body>
@@ -38,7 +33,7 @@
             <span>EVOZXa FUTURE</span>
         </div>
         <nav class="nav-links">
-            <a href="index.html" style="color: var(--gold); margin-right: 20px; font-weight: bold;">Deploy</a>
+            <a href="index.html" style="color: var(--gold);">Deploy</a>
             <a href="dashboard.html" style="color: white;">Dashboard</a>
         </nav>
         <button id="connectBtn">Connect Wallet</button>
@@ -47,7 +42,6 @@
     <main class="container">
         <section class="hero">
             <h1>Launch Professional Tokens On EVOZ</h1>
-            <p>Deploy, Verify and Manage smart contracts directly on EVOZ Mainnet.</p>
             <div id="walletInfo" class="wallet-info">
                 <div class="wallet-item"><span>Wallet</span><strong id="walletAddress">Not Connected</strong></div>
                 <div class="wallet-item"><span>EVOZ</span><strong id="evozBalance">0.00</strong></div>
@@ -62,31 +56,31 @@
                     <input id="name" type="text" placeholder="Token Name" />
                     <input id="symbol" type="text" placeholder="Symbol" />
                     <input id="supply" type="number" placeholder="Total Supply" />
-                    <div class="features-box">
+                    
+                    <div class="features-box" style="margin: 15px 0;">
                         <h3>Features</h3>
                         <label><input type="checkbox" id="burnable"> Burnable</label>
                         <label><input type="checkbox" id="mintable"> Mintable</label>
                         <label><input type="checkbox" id="ownership"> Ownership</label>
                     </div>
+
                     <div class="main-accordion-item">
-                        <input type="checkbox" id="groupMetadata" class="group-toggle">
-                        <label for="groupMetadata" class="main-accordion-header">METADATA <span class="arrow">▼</span></label>
-                        <div class="main-accordion-content">
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="website"> Website</label><div class="sub-accordion-content"><input id="websiteUrl" type="text" placeholder="Website URL" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="telegram"> Telegram</label><div class="sub-accordion-content"><input id="telegramUrl" type="text" placeholder="Telegram URL" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="twitter"> Twitter</label><div class="sub-accordion-content"><input id="twitterUrl" type="text" placeholder="Twitter URL" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="logo"> Logo</label><div class="sub-accordion-content"><input id="logoUrl" type="text" placeholder="Logo URL" /></div></div>
+                        <label class="main-accordion-header" onclick="toggleElement('metaContent')">METADATA ▼</label>
+                        <div id="metaContent" class="main-accordion-content">
+                            <input id="websiteUrl" type="text" placeholder="Website URL" />
+                            <input id="telegramUrl" type="text" placeholder="Telegram URL" />
+                            <input id="twitterUrl" type="text" placeholder="Twitter URL" />
+                            <input id="logoUrl" type="text" placeholder="Logo URL" />
                         </div>
                     </div>
+
                     <div class="main-accordion-item">
-                        <input type="checkbox" id="groupAdvanced" class="group-toggle">
-                        <label for="groupAdvanced" class="main-accordion-header">ADVANCED SETTINGS <span class="arrow">▼</span></label>
-                        <div class="main-accordion-content">
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="maxWallet"> Max Wallet</label><div class="sub-accordion-content"><input id="maxWalletValue" type="number" placeholder="Max Wallet %" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="maxTx"> Max TX</label><div class="sub-accordion-content"><input id="maxTxValue" type="number" placeholder="Max TX %" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="tradingControl"> Trading Control</label><div class="sub-accordion-content"><p style="font-size: 13px; color: var(--muted); margin-bottom: 14px; font-style: italic;">* Enables pausing/unpausing contract transactions.</p></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="buyTax"> Buy Tax</label><div class="sub-accordion-content"><input id="buyTaxValue" type="number" placeholder="Buy Tax %" /></div></div>
-                            <div class="sub-accordion-item"><label><input type="checkbox" id="sellTax"> Sell Tax</label><div class="sub-accordion-content"><input id="sellTaxValue" type="number" placeholder="Sell Tax %" /></div></div>
+                        <label class="main-accordion-header" onclick="toggleElement('advContent')">ADVANCED SETTINGS ▼</label>
+                        <div id="advContent" class="main-accordion-content">
+                            <input id="maxWalletValue" type="number" placeholder="Max Wallet %" />
+                            <input id="maxTxValue" type="number" placeholder="Max TX %" />
+                            <input id="buyTaxValue" type="number" placeholder="Buy Tax %" />
+                            <input id="sellTaxValue" type="number" placeholder="Sell Tax %" />
                             <input id="burnTaxShare" type="number" placeholder="Burn Tax Share %" />
                             <input id="marketingWallet" type="text" placeholder="Marketing Wallet" />
                             <input id="developmentWallet" type="text" placeholder="Development Wallet" />
@@ -96,22 +90,23 @@
             </section>
 
             <section class="card">
-                <h2>Deployment Summary</h2>
+                <h2>Summary</h2>
                 <div id="summary">
-                    <div class="summary-row"><span>Total EVOZX Fee</span><strong id="evozxFee">10</strong></div>
-                    <div class="summary-row"><span>Total EVOZ Value</span><strong id="evozFee">50</strong></div>
+                    <div class="summary-row"><span>Fee</span><strong id="evozxFee">10</strong></div>
                 </div>
                 <button id="deployBtn" style="width: 100%; padding: 15px; margin-top: 20px;">Deploy Token</button>
-                <p id="deployStatus" style="text-align: center; font-size: 12px; margin-top: 15px; color: var(--gold); font-weight: 600;"></p>
             </section>
         </div>
     </main>
-
-    <footer class="dapp-footer">
-        <p>&copy; 2026 EVOZXLabs. All Rights Reserved.</p>
-    </footer>
 </div>
 
+<script>
+    // FUNGSI PENGGANTI CHECKBOX TOGGLE BIAR GAK BUGGY
+    function toggleElement(id) {
+        const el = document.getElementById(id);
+        el.style.display = (el.style.display === "block") ? "none" : "block";
+    }
+</script>
 <script type="module" src="./js/app.js"></script>
 </body>
 </html>
