@@ -1,3 +1,7 @@
+import { initFeeCalculator } from "./fee-realtime.js";
+
+initFeeCalculator();
+
 import {
     connectWallet,
     getSigner,
