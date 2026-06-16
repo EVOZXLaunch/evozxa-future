@@ -1,117 +1,148 @@
-# 🚀 EVOZXa FUTURE — Professional Token Launchpad
+🚀 EVOZXa FUTURE
 
-![EVOZXA Banner](https://img.shields.io/badge/Network-EVOZ%20Mainnet-2563eb?style=for-the-badge&logo=ethereum&logoColor=fff)
-![Ethers.js](https://img.shields.io/badge/Ethers.js-v6.13.5-ffd700?style=for-the-badge&logo=javascript&logoColor=000)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+"EVOZ Network" (https://img.shields.io/badge/Network-EVOZ%20Mainnet-2563eb?style=for-the-badge)
+"Ethers.js" (https://img.shields.io/badge/Ethers.js-v6.13.5-ffd700?style=for-the-badge)
+"License" (https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**EVOZXa FUTURE** adalah platform Desentralisasi (DApp) mutakhir yang dirancang khusus untuk mendeploy, memverifikasi, dan mengelola Smart Contract Token profesional secara instan langsung di atas jaringan **EVOZ Mainnet**. 
+A decentralized token launchpad for the EVOZ Network.
 
-Dengan antarmuka pengguna (UI) futuristik bertema cyberpunk gelap, platform ini memungkinkan pengembang maupun proyek kripto baru untuk meluncurkan token standar ERC-20 yang disesuaikan dengan fitur-fitur canggih (Advanced Settings) hanya dalam beberapa klik, tanpa perlu keahlian menulis kode Solidity dari nol.
-
----
-
-## ✨ Fitur Utama
-
-*   **⚡ One-Click Token Deployment:** Buat dan luncurkan token kustom Anda langsung ke EVOZ Mainnet secara instan.
-*   **🛠️ Modular Token Features:** Aktifkan fitur-fitur token standar industri seperti *Burnable*, *Mintable*, dan *Ownership Control*.
-*   **📂 Multi-Level Group Accordion UI:** Tata letak konfigurasi input yang intuitif, memisahkan manajemen Metadata Proyek dengan Pengaturan Lanjut (*Advanced Settings*).
-*   **🛡️ Advanced Anti-Whale & Tax Security:** 
-    *   Pengaturan pembatasan transaksi (*Max TX %*) dan dompet (*Max Wallet %*).
-    *   Sistem pemotongan pajak beli & jual otomatis (*Buy/Sell Tax %*).
-    *   Alokasi pembagian pajak pembakaran (*Burn Tax Share*) serta dompet khusus *Marketing* & *Development*.
-*   **💼 Web3 Wallet Integration:** Sinkronisasi saldo native token `EVOZ` dan token tata kelola `EVOZX` secara *real-time* via Ethers.js v6.
+EVOZXa FUTURE provides a streamlined interface for creating, deploying, and managing customizable EVM-compatible tokens through a web-based application. The platform integrates token deployment, metadata management, wallet connectivity, and smart contract verification into a unified workflow.
 
 ---
 
-## 🛠️ Tech Stack & Arsitektur
+Overview
 
-DApp ini dirancang menggunakan pendekatan **Vanilla & Modern Hybrid**, memastikan kecepatan pemuatan halaman yang sangat cepat tanpa dependensi berat.
+EVOZXa FUTURE is designed to simplify token creation on the EVOZ blockchain while maintaining flexibility for developers, startups, communities, and blockchain projects.
 
-*   **Frontend:** HTML5 Semantik & CSS3 Modern (Menggunakan fitur mutakhir `:has()` untuk kontrol akordion murni tanpa JavaScript berlebih).
-*   **Web3 Library:** [Ethers.js v6.13.5 (UMD)](https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js) untuk interaksi blockchain yang aman dan stabil.
-*   **Font Asset:** *Plus Jakarta Sans* via Google Fonts untuk tipografi premium.
+The platform enables users to deploy configurable token contracts without modifying Solidity source code directly.
 
 ---
 
-## 📂 Struktur Direktori Proyek
+Features
 
-```text
+Token Deployment
+
+- Deploy EVM-compatible tokens
+- Custom token name and symbol
+- Configurable total supply
+- Factory-based deployment architecture
+
+Advanced Token Configuration
+
+- Mintable functionality
+- Burnable functionality
+- Ownership control
+- Configurable deployment parameters
+
+Tokenomics & Security Controls
+
+- Maximum transaction limits
+- Maximum wallet limits
+- Buy and sell tax configuration
+- Burn tax allocation
+- Marketing wallet allocation
+- Development wallet allocation
+
+Project Metadata
+
+- Website
+- Telegram
+- X (Twitter)
+- Discord
+- Project logo support
+
+Wallet Integration
+
+- EVM wallet connectivity
+- Real-time EVOZ balance monitoring
+- Real-time EVOZX balance monitoring
+
+Smart Contract Verification
+
+- Verification guide included
+- Standard Solidity JSON input support
+- Explorer verification workflow
+
+---
+
+Technology Stack
+
+Frontend
+
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6)
+
+Blockchain
+
+- Solidity
+- Ethers.js v6
+- EVOZ Mainnet
+
+User Interface
+
+- Responsive Design
+- Accordion-Based Configuration Layout
+- Modern Dark Theme
+
+---
+
+Repository Structure
+
 evozxa-future-main/
-│
 ├── README.md
-│   └── Panduan verifikasi smart contract di EVOZ Explorer
-│
+├── LICENSE
+├── .gitignore
 ├── index.html
-│   └── Halaman utama aplikasi EVOZXa FUTURE
-│
 ├── verification-guide.html
-│   └── Halaman panduan verifikasi kontrak untuk pengguna
-│
 ├── abi/
-│   │
-│   ├── evozx.json
-│   │   └── ABI token EVOZX
-│   │
-│   ├── exchange.json
-│   │   └── ABI smart contract exchange
-│   │
-│   ├── factory.json
-│   │   └── ABI smart contract factory deployment token
-│   │
-│   └── token.json
-│       └── ABI template token yang dihasilkan
-│
 ├── assets/
-│   │
-│   ├── EvozXUltimateFactory.sol
-│   │   └── Smart contract factory utama
-│   │
-│   ├── LaunchKitToken.sol
-│   │   └── Template smart contract token
-│   │
-│   ├── LaunchKitTypes.sol
-│   │   └── Definisi struct, enum, dan tipe data
-│   │
-│   └── standard-input.json
-│       └── Solidity Standard JSON Input untuk verifikasi kontrak
-│
 ├── css/
-│   │
-│   └── app.css
-│       └── Seluruh styling UI aplikasi
-│
 ├── images/
-│   │
-│   └── logo.png
-│       └── Logo EVOZXa FUTURE
-│
 └── js/
-    │
-    ├── app.js
-    │   └── Inisialisasi aplikasi dan integrasi modul
-    │
-    ├── balance.js
-    │   └── Mengambil saldo EVOZ & EVOZX wallet
-    │
-    ├── config.js
-    │   └── Konfigurasi jaringan dan alamat kontrak
-    │
-    ├── deploy.js
-    │   └── Logika deploy token baru
-    │
-    ├── exchange.js
-    │   └── Integrasi swap/pembelian token melalui exchange
-    │
-    ├── main.js
-    │   └── Entry point aplikasi frontend
-    │
-    └── wallet.js
-        └── Koneksi wallet (MetaMask/EVM Wallet)
+
+---
+
+Smart Contracts
+
+Contract| Description
+EvozXUltimateFactory.sol| Main deployment factory
+LaunchKitToken.sol| Token template contract
+LaunchKitTypes.sol| Shared structures and type definitions
+
+---
+
+Deployment Flow
+
+1. Connect Wallet
+2. Configure Token Parameters
+3. Add Project Metadata
+4. Deploy Through Factory Contract
+5. Verify Contract
+6. Manage Token On-Chain
+
+---
+
+Security Notice
+
+Always verify contract addresses before interacting with deployed contracts.
+
+Never share private keys, seed phrases, or wallet credentials.
+
+All blockchain transactions are irreversible once confirmed on-chain.
+
+---
+
+Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+Please open an issue or submit a pull request for proposed changes.
 
 ---
 
 License
 
-EVOZXa FUTURE is open-source software released under the MIT License.
+This project is licensed under the MIT License.
 
 Copyright © 2026 EVOZXLabs.
