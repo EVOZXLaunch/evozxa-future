@@ -9,10 +9,6 @@ loadBalances
 } from "./balance.js";
 
 import {
-calculateFee
-} from ".abi/factory.json";
-
-import {
 loadFactory,
 loadEvozx,
 buildTokenConfig,
