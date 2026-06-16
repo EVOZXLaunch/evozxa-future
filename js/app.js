@@ -20,7 +20,7 @@ CONFIG
 } from "./config.js";
 
 // =========================================================
-// INTERSEPTOR POPUP MODAL MODERN (PERBAIKAN SINKRONISASI)
+// INTERSEPTOR POPUP MODAL MODERN (FULL ENGLISH VERSION)
 // =========================================================
 const inisialisasiModalAlert = () => {
     window.alert = function(message) {
@@ -35,41 +35,46 @@ const inisialisasiModalAlert = () => {
             return;
         }
 
-        // Normalisasi pesan teks ke string biasa
+        // Normalisasi pesan teks ke string huruf kecil untuk akurasi deteksi
         const msgStr = String(message).toLowerCase();
 
-        // Tentukan Judul Berdasarkan Isi Pesan (Dinamis & Akurat)
+        // Penentuan Judul Dinamis Menggunakan Bahasa Inggris
         if (msgStr.includes('success') || msgStr.includes('deployed') || msgStr.includes('berhasil')) {
             if (modalTitle) {
-                modalTitle.innerText = "Sukses";
-                modalTitle.style.color = "#00ff88"; // Hijau Magis
+                modalTitle.innerText = "Success";
+                modalTitle.style.color = "#00ff88"; // Neon Green
             }
         } else if (msgStr.includes('failed') || msgStr.includes('insufficient') || msgStr.includes('first') || msgStr.includes('required') || msgStr.includes('gagal')) {
             if (modalTitle) {
-                modalTitle.innerText = "Peringatan";
-                modalTitle.style.color = "#ff4a4a"; // Merah Peringatan
+                modalTitle.innerText = "Warning";
+                modalTitle.style.color = "#ff4a4a"; // Warning Red
             }
         } else {
             if (modalTitle) {
-                modalTitle.innerText = "Tips";
-                modalTitle.style.color = "#ffd700"; // Emas Kuno Default
+                modalTitle.innerText = "Notice";
+                modalTitle.style.color = "#ffd700"; // Default Gold Wizard Theme
             }
         }
 
-        // Masukkan pesan ke dalam modal
+        // Injeksi teks pesan ke dalam modal body
         modalMessage.innerText = message;
 
-        // Tampilkan modal secara flex
+        // Tampilkan modal overlay secara flex centring
         modal.style.display = 'flex';
 
-        // Logika penutupan modal (Sudah diperbaiki dari kesalahan ketik)
+        // Pastikan teks tombol konfirmasi ikut terpaksa menggunakan Bahasa Inggris
+        if (confirmBtn) {
+            confirmBtn.innerText = "CONFIRM";
+        }
+
+        // Logika fungsi klik tutup modal overlay
         confirmBtn.onclick = function() {
             modal.style.display = 'none';
         };
     };
 };
 
-// Jalankan interseptor secara instan
+// Jalankan interseptor secara instan saat siklus hidup DOM dimulai
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inisialisasiModalAlert);
 } else {
