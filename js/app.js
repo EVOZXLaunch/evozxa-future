@@ -73,7 +73,15 @@ const inisialisasiModalAlert = () => {
         if (tokenDetails) {
             modalTitle.innerText = "Deployment Success!";
             modalTitle.style.color = "#ffd700";
-            modalMessage.innerHTML = `Token <strong>${tokenDetails.name}</strong> berhasil dideploy!<br><br>Address:<br><code>${tokenDetails.address}</code>`;
+            modalMessage.innerHTML = `
+                <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 10px; margin-bottom: 16px;">
+                    <p>Token <strong>${tokenDetails.name}</strong> berhasil dideploy!</p>
+                    <p>Address:<br><code>${tokenDetails.address}</code></p>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9em;">Token Anda sudah aktif! Klik link di bawah untuk panduan verifikasi kontrak agar token Anda terpercaya di explorer.</p>
+                <a href="verification-guide.html" style="display: block; margin-top: 15px; color: var(--gold); text-decoration: underline; font-weight: bold;">
+                    Read Verification Guide
+                </a>`;
         } else {
             modalTitle.innerText = "Notice";
             modalTitle.style.color = "#fff";
@@ -91,10 +99,8 @@ function updateFee() {
         "maxTx", "tradingControl", "buyTax", "sellTax"
     ];
     let fee = 10;
-    const features = {};
     checkboxes.forEach(id => {
         const el = document.getElementById(id);
-        features[id] = el?.checked;
         if (el?.checked) {
             if (["burnable"].includes(id)) fee += 2;
             else if (["mintable"].includes(id)) fee += 3;
