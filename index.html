@@ -33,35 +33,44 @@
             <section class="card">
                 <h2>Token Configuration</h2>
                 <form id="tokenForm">
-    <input id="name" type="text" placeholder="Token Name">
-    <input id="symbol" type="text" placeholder="Symbol">
-    <input id="supply" type="number" placeholder="Total Supply">
+                    <input id="name" type="text" placeholder="Token Name">
+                    <input id="symbol" type="text" placeholder="Symbol">
+                    <input id="supply" type="number" placeholder="Total Supply">
 
-    <div class="features-box">
-        <h3>Features</h3>
-        <div class="checkbox-grid">
-            <label><input type="checkbox" id="burnable"> Burnable</label>
-            <label><input type="checkbox" id="mintable"> Mintable</label>
-            <label><input type="checkbox" id="ownership"> Ownership</label>
-            <label><input type="checkbox" id="maxWallet"> Max Wallet</label>
-            <label><input type="checkbox" id="maxTx"> Max TX</label>
-            <label><input type="checkbox" id="tradingControl"> Trading Control</label>
-            <label><input type="checkbox" id="buyTax"> Buy Tax</label>
-            <label><input type="checkbox" id="sellTax"> Sell Tax</label>
-        </div>
-    </div>
+                    <div class="features-box">
+                        <h3>Features</h3>
+                        <div class="checkbox-grid">
+                            <label><input type="checkbox" id="burnable"> Burnable</label>
+                            <label><input type="checkbox" id="mintable"> Mintable</label>
+                            <label><input type="checkbox" id="ownership"> Ownership</label>
+                            <label><input type="checkbox" id="maxWallet"> Max Wallet</label>
+                            <label><input type="checkbox" id="maxTx"> Max TX</label>
+                            <label><input type="checkbox" id="tradingControl"> Trading Control</label>
+                            <label><input type="checkbox" id="buyTax"> Buy Tax</label>
+                            <label><input type="checkbox" id="sellTax"> Sell Tax</label>
+                        </div>
+                    </div>
 
-    <div class="accordion">
-        <div class="accordion-header" onclick="toggleAcc(this)">METADATA ▼</div>
-        <div class="accordion-content">
-            <input id="websiteUrl" type="text" placeholder="Website URL">
-            <input id="telegramUrl" type="text" placeholder="Telegram URL">
-            <input id="twitterUrl" type="text" placeholder="Twitter URL">
-            <input id="logoUrl" type="text" placeholder="Logo URL">
-        </div>
-    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAcc(this)">METADATA ▼</div>
+                        <div class="accordion-content">
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Website</label><input id="websiteUrl" type="text" class="hidden-input" placeholder="Website URL" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Telegram</label><input id="telegramUrl" type="text" class="hidden-input" placeholder="Telegram URL" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Twitter</label><input id="twitterUrl" type="text" class="hidden-input" placeholder="Twitter URL" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Logo</label><input id="logoUrl" type="text" class="hidden-input" placeholder="Logo URL" disabled></div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAcc(this)">ADVANCED SETTINGS ▼</div>
+                        <div class="accordion-content">
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Max Wallet</label><input id="maxWalletValue" type="number" class="hidden-input" placeholder="Max Wallet %" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Max TX</label><input id="maxTxValue" type="number" class="hidden-input" placeholder="Max TX %" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Buy Tax</label><input id="buyTaxValue" type="number" class="hidden-input" placeholder="Buy Tax %" disabled></div>
+                            <div class="feature-wrapper"><label><input type="checkbox" onchange="toggleInput(this)"> Sell Tax</label><input id="sellTaxValue" type="number" class="hidden-input" placeholder="Sell Tax %" disabled></div>
+                        </div>
+                    </div>
                 </form>
-                
             </section>
 
             <section class="card">
