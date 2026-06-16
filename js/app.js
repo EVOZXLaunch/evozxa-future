@@ -1,33 +1,25 @@
 import { connectWallet, getSigner, getAddress } from "./wallet.js";
 import { loadBalances } from "./balance.js";
-import { calculateFee } from "./pricing.js";
 import { loadFactory, loadEvozx, buildTokenConfig, validateConfig } from "./deploy.js";
 import { CONFIG } from "./config.js";
 
 // =========================================================
-// 1. UI: ACCORDION & INPUT TOGGLE (FIXED)
+// 1. UI: ACCORDION & INPUT TOGGLE
 // =========================================================
-
-// Toggle Accordion Utama (Metadata/Advanced)
 window.toggleAcc = function(el) {
     const content = el.nextElementSibling;
     content.style.display = (content.style.display === "block") ? "none" : "block";
 };
 
-// Toggle Tampil/Sembunyi Input saat Checkbox dicentang
 window.toggleInput = function(checkbox) {
     const wrapper = checkbox.closest('.feature-wrapper');
     const input = wrapper.querySelector('.hidden-input');
-    
-    if (checkbox.checked) {
-        input.style.display = "block";
-        input.disabled = false;
-    } else {
-        input.style.display = "none";
-        input.disabled = true;
-        input.value = ""; // Reset nilai saat uncheck
+    if (input) {
+        input.style.display = checkbox.checked ? "block" : "none";
+        input.disabled = !checkbox.checked;
+        if (!checkbox.checked) input.value = "";
     }
-    updateFee(); // Hitung ulang fee saat ada perubahan
+    updateFee(); 
 };
 
 // =========================================================
@@ -54,36 +46,33 @@ connectBtn.addEventListener("click", async () => {
 });
 
 // =========================================================
-// 3. FEE CALCULATOR
+// 3. FEE CALCULATOR (Langsung dari Factory Contract)
 // =========================================================
-function updateFee() {
-    const features = {};
-    
-    // Ambil semua checkbox fitur utama
-    const featureIds = ["burnable", "mintable", "ownership", "maxWallet", "maxTx", "tradingControl", "buyTax", "sellTax"];
-    featureIds.forEach(id => {
-        const el = document.getElementById(id);
-        features[id] = el ? el.checked : false;
-    });
+async function updateFee() {
+    try {
+        const signer = getSigner();
+        if (!signer) return;
 
-    // Ambil status Metadata/Advanced (cek apakah input aktif/punya value)
-    const inputs = document.querySelectorAll('.hidden-input');
-    inputs.forEach(input => {
-        if (!input.disabled && input.value.trim() !== "") {
-            features[input.id.replace('Url', '').replace('Value', '')] = true;
-        }
-    });
-
-    const total = calculateFee(features);
-    document.getElementById("evozxFee").textContent = total;
-    document.getElementById("evozFee").textContent = total * 5;
+        const factory = await loadFactory(signer);
+        const config = buildTokenConfig(getAddress()); // Pastikan fungsi ini tersedia di deploy.js
+        
+        // Mengambil biaya langsung dari smart contract
+        const fee = await factory.getDeploymentFee(config);
+        
+        document.getElementById("evozxFee").textContent = fee.toString();
+        document.getElementById("evozFee").textContent = (Number(fee) * 5).toString(); // Jika ada multiplier
+    } catch (error) {
+        console.log("Fee calculation skipped (Wallet not ready)");
+    }
 }
 
-// Event Listeners umum
-document.addEventListener("change", (e) => { if (e.target.type === "checkbox") updateFee(); });
-document.addEventListener("input", (e) => { if (e.target.type === "text" || e.target.type === "number") updateFee(); });
-
-updateFee();
+// Event Listeners: Trigger update saat ada perubahan input
+document.addEventListener("change", (e) => { 
+    if (e.target.tagName === "INPUT") updateFee(); 
+});
+document.addEventListener("input", (e) => { 
+    if (e.target.tagName === "INPUT") updateFee(); 
+});
 
 // =========================================================
 // 4. DEPLOYMENT LOGIC
