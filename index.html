@@ -33,6 +33,7 @@
 
 <main class="container">
 
+<!-- HERO -->
 <section class="hero">
 
 <h1 id="heroText">Create Professional Tokens On EVOZ</h1>
@@ -65,35 +66,31 @@
 
 </section>
 
+<!-- GRID -->
 <div class="grid">
 
-<!-- LEFT: WIZARD -->
+<!-- LEFT -->
 <section class="card">
 
 <h2>Deploy Wizard</h2>
 
-<!-- STEP INDICATOR -->
-<div id="stepIndicator">
-Step <span id="step">1</span> / 4
-</div>
-
 <form id="tokenForm">
 
-<!-- STEP 1 -->
-<div class="step" data-step="1">
+<!-- BASIC -->
+<div class="step" id="step-basic">
 
-<h3>Basic Info</h3>
+<h3>1. Basic Info</h3>
 
-<input id="name" type="text" placeholder="Token Name" required>
-<input id="symbol" type="text" placeholder="Symbol" required>
-<input id="supply" type="number" placeholder="Total Supply" required>
+<input id="name" type="text" placeholder="Token Name">
+<input id="symbol" type="text" placeholder="Symbol">
+<input id="supply" type="number" placeholder="Total Supply">
 
 </div>
 
-<!-- STEP 2 -->
-<div class="step" data-step="2" style="display:none">
+<!-- FEATURES -->
+<div class="step" id="step-features" style="display:none">
 
-<h3>Features</h3>
+<h3>2. Features</h3>
 
 <div class="feature-list">
 
@@ -108,10 +105,10 @@ Step <span id="step">1</span> / 4
 
 </div>
 
-<!-- STEP 3 -->
-<div class="step" data-step="3" style="display:none">
+<!-- ADVANCED -->
+<div class="step" id="step-advanced" style="display:none">
 
-<h3>Advanced</h3>
+<h3>3. Advanced Settings</h3>
 
 <input id="buyTaxValue" type="number" placeholder="Buy Tax %">
 <input id="sellTaxValue" type="number" placeholder="Sell Tax %">
@@ -121,51 +118,55 @@ Step <span id="step">1</span> / 4
 
 </div>
 
-<!-- STEP 4 -->
-<div class="step" data-step="4" style="display:none">
+<!-- REVIEW -->
+<div class="step" id="step-review" style="display:none">
 
-<h3>Review</h3>
+<h3>4. Final Review</h3>
 
-<p>Check your configuration before deploy.</p>
+<div id="reviewBox"></div>
 
-<div id="livePreview"></div>
+<p style="color:#94a3b8; margin-top:10px;">
+Check all details before deployment. This action cannot be undone.
+</p>
 
 </div>
 
 </form>
 
-<!-- NAV BUTTONS -->
-<div style="margin-top:16px; display:flex; gap:10px;">
-<button type="button" id="prevBtn">Back</button>
+<!-- NAV -->
+<div style="display:flex; gap:10px; margin-top:16px;">
+<button type="button" id="backBtn">Back</button>
 <button type="button" id="nextBtn">Next</button>
 </div>
 
 </section>
 
-<!-- RIGHT: LIVE SUMMARY -->
+<!-- RIGHT -->
 <section class="card">
 
-<h2>Live Fee Preview</h2>
+<h2>Live Deployment Preview</h2>
 
 <div class="summary-row">
-<span>EVOZX Fee</span>
-<strong id="evozxFee">10</strong>
+<span>Base Fee</span>
+<strong id="baseFee">10</strong>
 </div>
 
 <div class="summary-row">
-<span>EVOZ Value</span>
-<strong id="evozFee">50</strong>
+<span>Dynamic Fee</span>
+<strong id="dynamicFee">0</strong>
 </div>
 
-<hr style="margin:12px 0; border:1px solid rgba(255,255,255,.08)">
+<hr style="border:1px solid rgba(255,255,255,.08); margin:12px 0">
 
-<h3>Live Status</h3>
-
-<div id="liveStatus">
-Waiting input...
+<div class="summary-row">
+<span>Total Fee</span>
+<strong id="totalFee">10</strong>
 </div>
 
-<button id="deployBtn" style="margin-top:16px; width:100%;">
+<h3 style="margin-top:12px;">Status</h3>
+<div id="deployStatus">Idle</div>
+
+<button id="deployBtn" style="width:100%; margin-top:16px;">
 Deploy Token
 </button>
 
@@ -177,58 +178,116 @@ Deploy Token
 
 </div>
 
-<!-- CORE LOGIC -->
-<script>
-let currentStep = 1;
-const steps = document.querySelectorAll(".step");
-const stepText = document.getElementById("step");
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(8px);
+justify-content:center;
+align-items:center;
+z-index:999;
+">
 
-function showStep(step){
-steps.forEach(s => s.style.display = "none");
-document.querySelector(`[data-step="${step}"]`).style.display = "block";
-stepText.textContent = step;
+<div style="
+background:#111827;
+padding:20px;
+border-radius:12px;
+width:360px;
+border:1px solid rgba(255,255,255,.1);
+">
+
+<h3>Confirm Deployment</h3>
+
+<p style="color:#94a3b8; margin:10px 0;">
+Are you sure you want to deploy this token?
+This action will consume gas fee.
+</p>
+
+<div style="display:flex; gap:10px;">
+<button id="cancelDeploy" style="flex:1; background:#374151;">Cancel</button>
+<button id="confirmDeploy" style="flex:1;">Confirm</button>
+</div>
+
+</div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+let step = 1;
+
+const steps = {
+1: "step-basic",
+2: "step-features",
+3: "step-advanced",
+4: "step-review"
+};
+
+function showStep(n){
+Object.values(steps).forEach(id=>{
+document.getElementById(id).style.display = "none";
+});
+
+document.getElementById(steps[n]).style.display = "block";
 }
 
 document.getElementById("nextBtn").onclick = () => {
-if(currentStep < 4) currentStep++;
-showStep(currentStep);
+if(step < 4) step++;
+showStep(step);
 updatePreview();
 };
 
-document.getElementById("prevBtn").onclick = () => {
-if(currentStep > 1) currentStep--;
-showStep(currentStep);
+document.getElementById("backBtn").onclick = () => {
+if(step > 1) step--;
+showStep(step);
 };
 
-showStep(1);
-
-/* LIVE FEE + PREVIEW */
-const inputs = document.querySelectorAll("input");
-
-inputs.forEach(i => {
-i.addEventListener("input", updatePreview);
-});
-
 function updatePreview(){
-const name = document.getElementById("name")?.value || "-";
-const symbol = document.getElementById("symbol")?.value || "-";
-const supply = document.getElementById("supply")?.value || "-";
 
-document.getElementById("liveStatus").innerHTML =
+const name = document.getElementById("name").value || "-";
+const symbol = document.getElementById("symbol").value || "-";
+const supply = document.getElementById("supply").value || "-";
+
+document.getElementById("reviewBox").innerHTML =
 `<p><b>${name}</b> (${symbol})</p>
 <p>Supply: ${supply}</p>`;
 
-let base = 10;
-let extra = 0;
+let dynamic = 0;
 
-if(document.getElementById("burnable")?.checked) extra += 2;
-if(document.getElementById("mintable")?.checked) extra += 2;
-if(document.getElementById("maxTx")?.checked) extra += 1;
+if(document.getElementById("burnable").checked) dynamic += 2;
+if(document.getElementById("mintable").checked) dynamic += 2;
+if(document.getElementById("maxTx").checked) dynamic += 1;
 
-document.getElementById("evozxFee").textContent = base + extra;
-document.getElementById("evozFee").textContent = 50;
+document.getElementById("dynamicFee").textContent = dynamic;
+document.getElementById("totalFee").textContent = 10 + dynamic;
 }
 
+document.getElementById("deployBtn").onclick = () => {
+document.getElementById("confirmModal").style.display = "flex";
+};
+
+document.getElementById("cancelDeploy").onclick = () => {
+document.getElementById("confirmModal").style.display = "none";
+};
+
+document.getElementById("confirmDeploy").onclick = async () => {
+
+document.getElementById("deployStatus").textContent = "Deploying...";
+
+setTimeout(()=>{
+document.getElementById("deployStatus").textContent = "Success ✓";
+document.getElementById("confirmModal").style.display = "none";
+},2500);
+
+};
+
+document.querySelectorAll("input").forEach(i=>{
+i.addEventListener("input", updatePreview);
+});
+
+showStep(1);
 updatePreview();
 </script>
 
