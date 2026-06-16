@@ -35,14 +35,13 @@ const inisialisasiModalAlert = () => {
             return;
         }
 
-        // Normalisasi pesan teks ke string huruf kecil untuk akurasi deteksi
         const msgStr = String(message).toLowerCase();
 
-        // Penentuan Judul Dinamis Menggunakan Bahasa Inggris
+        // English Dynamic Title Detection
         if (msgStr.includes('success') || msgStr.includes('deployed') || msgStr.includes('berhasil')) {
             if (modalTitle) {
                 modalTitle.innerText = "Success";
-                modalTitle.style.color = "#00ff88"; // Neon Green
+                modalTitle.style.color = "#00ff88"; // Magic Neon Green
             }
         } else if (msgStr.includes('failed') || msgStr.includes('insufficient') || msgStr.includes('first') || msgStr.includes('required') || msgStr.includes('gagal')) {
             if (modalTitle) {
@@ -52,33 +51,53 @@ const inisialisasiModalAlert = () => {
         } else {
             if (modalTitle) {
                 modalTitle.innerText = "Notice";
-                modalTitle.style.color = "#ffd700"; // Default Gold Wizard Theme
+                modalTitle.style.color = "#ffd700"; // Wizard Gold Default
             }
         }
 
-        // Injeksi teks pesan ke dalam modal body
         modalMessage.innerText = message;
-
-        // Tampilkan modal overlay secara flex centring
         modal.style.display = 'flex';
 
-        // Pastikan teks tombol konfirmasi ikut terpaksa menggunakan Bahasa Inggris
+        // Force English button text
         if (confirmBtn) {
             confirmBtn.innerText = "CONFIRM";
         }
 
-        // Logika fungsi klik tutup modal overlay
         confirmBtn.onclick = function() {
             modal.style.display = 'none';
         };
     };
 };
 
-// Jalankan interseptor secara instan saat siklus hidup DOM dimulai
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inisialisasiModalAlert);
 } else {
     inisialisasiModalAlert();
+}
+
+// =========================================================
+// EMBEDDED PRICING SYSTEM (FEE CALCULATOR)
+// =========================================================
+function calculateFee(features) {
+    // Nilai dasar 10 EVOZX (Menyesuaikan placeholder awal di UI summary HTML Anda)
+    let fee = 10; 
+    
+    // Penambahan kalkulasi biaya per fitur opsional (bisa Anda ubah nilainya)
+    if (features.burnable) fee += 2;
+    if (features.mintable) fee += 3;
+    if (features.ownership) fee += 1;
+    if (features.maxWallet) fee += 2;
+    if (features.maxTx) fee += 2;
+    if (features.tradingControl) fee += 4;
+    if (features.buyTax) fee += 3;
+    if (features.sellTax) fee += 3;
+
+    // Tambahan biaya jika Metadata URL diisi
+    if (features.website || features.telegram || features.twitter || features.logo) {
+        fee += 1;
+    }
+
+    return fee;
 }
 // =========================================================
 
