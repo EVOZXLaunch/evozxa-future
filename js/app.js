@@ -10,7 +10,7 @@ loadBalances
 
 import {
 calculateFee
-} from "./pricing.js";
+} from ".abi/factory.json";
 
 import {
 loadFactory,
@@ -24,46 +24,61 @@ CONFIG
 } from "./config.js";
 
 // =========================================================
-// INTERSEPTOR POPUP MODAL MODERN (PENGGANTI WINDOW.ALERT)
+// INTERSEPTOR POPUP MODAL MODERN (PERBAIKAN SINKRONISASI)
 // =========================================================
-// Kode ini otomatis menangkap semua fungsi alert() di bawah
-// dan mengubahnya menjadi tampilan modal modern kustom kita.
-window.alert = function(message) {
-    const modal = document.getElementById('customModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
-    const confirmBtn = document.getElementById('modalConfirmBtn');
+const inisialisasiModalAlert = () => {
+    window.alert = function(message) {
+        const modal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const confirmBtn = document.getElementById('modalConfirmBtn');
 
-    if (!modal || !modalMessage) {
-        // Fallback aman jika elemen HTML modal belum termuat
-        console.warn("Custom modal elements not found, using native alert.");
-        console.log(message);
-        return;
-    }
+        if (!modal || !modalMessage) {
+            console.warn("Custom modal elements not found, using native alert.");
+            console.log(message);
+            return;
+        }
 
-    // Tentukan Judul Berdasarkan Isi Pesan (Dinamis)
-    if (message.toLowerCase().includes('success') || message.toLowerCase().includes('deployed')) {
-        if (modalTitle) modalTitle.innerText = "Sukses";
-        if (modalTitle) modalTitle.style.color = "#00ff88"; // Hijau untuk sukses
-    } else if (message.toLowerCase().includes('failed') || message.toLowerCase().includes('insufficient') || message.toLowerCase().includes('first')) {
-        if (modalTitle) modalTitle.innerText = "Peringatan";
-        if (modalTitle) modalTitle.style.color = "#ff4a4a"; // Merah untuk error/peringatan
-    } else {
-        if (modalTitle) modalTitle.innerText = "Tips";
-        if (modalTitle) modalTitle.style.color = "#ffcc00"; // Kuning emas default aplikasi Anda
-    }
+        // Normalisasi pesan teks ke string biasa
+        const msgStr = String(message).toLowerCase();
 
-    // Masukkan pesan ke dalam modal
-    modalMessage.innerText = message;
+        // Tentukan Judul Berdasarkan Isi Pesan (Dinamis & Akurat)
+        if (msgStr.includes('success') || msgStr.includes('deployed') || msgStr.includes('berhasil')) {
+            if (modalTitle) {
+                modalTitle.innerText = "Sukses";
+                modalTitle.style.color = "#00ff88"; // Hijau Magis
+            }
+        } else if (msgStr.includes('failed') || msgStr.includes('insufficient') || msgStr.includes('first') || msgStr.includes('required') || msgStr.includes('gagal')) {
+            if (modalTitle) {
+                modalTitle.innerText = "Peringatan";
+                modalTitle.style.color = "#ff4a4a"; // Merah Peringatan
+            }
+        } else {
+            if (modalTitle) {
+                modalTitle.innerText = "Tips";
+                modalTitle.style.color = "#ffd700"; // Emas Kuno Default
+            }
+        }
 
-    // Tampilkan modal
-    modal.style.display = 'flex';
+        // Masukkan pesan ke dalam modal
+        modalMessage.innerText = message;
 
-    // Logika menutup modal saat klik tombol Konfirmasi
-    confirmBtn.onclick = function() {
-        modal.style.display = 'none';
+        // Tampilkan modal secara flex
+        modal.style.display = 'flex';
+
+        // Logika penutupan modal (Sudah diperbaiki dari kesalahan ketik)
+        confirmBtn.onclick = function() {
+            modal.style.display = 'none';
+        };
     };
 };
+
+// Jalankan interseptor secara instan
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inisialisasiModalAlert);
+} else {
+    inisialisasiModalAlert();
+}
 // =========================================================
 
 const connectBtn =
@@ -117,7 +132,6 @@ balances.evozx
 
             console.error(error);
 
-            // Otomatis lari ke modal kustom
             alert(
                 error.message ||
                 "Wallet connection failed"
@@ -234,7 +248,6 @@ getSigner();
 
 if(!signer){
 
-// Otomatis lari ke modal kustom
 alert(
 "Connect wallet first"
 );
@@ -252,8 +265,6 @@ buildTokenConfig(
 getAddress()
 );
 
-// JIKA fungsi validateConfig(config) di dalam deploy.js melempar error via alert(),
-// ia juga akan otomatis memicu modal kustom ini tanpa mengubah file deploy.js tersebut!
 validateConfig(
 config
 );
@@ -378,7 +389,6 @@ console.log(
 tokenAddress
 );
 
-// Otomatis lari ke modal kustom dengan deteksi judul "Sukses"
 alert(
 `Token deployed successfully!
 
@@ -391,7 +401,6 @@ catch(error){
 
 console.error(error);
 
-// Otomatis lari ke modal kustom dengan deteksi judul "Peringatan"
 alert(
 error.message
 );
