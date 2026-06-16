@@ -167,7 +167,7 @@ button:hover{ border-color: var(--gold); color: var(--gold); box-shadow: var(--g
   .card { padding: 20px 16px; }
 }
 
-.dapp-footer { text-align: center; padding: 17px 16px 30px 16px; margin-top: 16px; }
+.dapp-footer { text-align: center; padding: 9px 8px 15px 8px; margin-top: 8px; }
 .dapp-footer p { font-size: 8px; color: var(--muted); letter-spacing: 0.8px; opacity: 0.6; transition: opacity 0.3s ease; }
 .dapp-footer p:hover { opacity: 1; color: var(--text); text-shadow: 0 0 8px rgba(213, 228, 245, 0.2); }
 
