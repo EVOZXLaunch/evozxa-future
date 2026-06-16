@@ -1,13 +1,24 @@
 <p align="center">
-  <img src="images/logo.png" width="200" alt="EVOZXa FUTURE Logo">
+  <img src="images/logo.png" width="160" alt="EVOZXa FUTURE Logo">
 </p>
 
 <h1 align="center">EVOZXa FUTURE</h1>
 
+<p align="center">
+  <a href="https://evozscan.com">
+    <img src="https://img.shields.io/badge/Network-EVOZ%20Mainnet-2563eb?style=for-the-badge&logo=ethereum&logoColor=white" alt="Network">
+  </a>
+  <a href="https://docs.ethers.org/">
+    <img src="https://img.shields.io/badge/Ethers.js-v6.13.5-ffd700?style=for-the-badge&logo=javascript&logoColor=black" alt="Ethers.js">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
+  </a>
+</p>
 
-"EVOZ Network" (https://img.shields.io/badge/Network-EVOZ%20Mainnet-2563eb?style=for-the-badge)
-"Ethers.js" (https://img.shields.io/badge/Ethers.js-v6.13.5-ffd700?style=for-the-badge)
-"License" (https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+<p align="center">
+  A decentralized token launchpad for the EVOZ Network.
+</p>
 
 A decentralized token launchpad for the EVOZ Network.
 
