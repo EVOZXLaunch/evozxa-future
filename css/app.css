@@ -1,69 +1,516 @@
-:root {
-    --bg: #05070d;
-    --surface: #0d1320;
-    --border: #1e293b;
-    --gold: #d4af37;
-    --blue: #2563eb;
-    --text: #ffffff;
-    --muted: #94a3b8;
+:root{
+    --bg:#050505;
+    --bg-secondary:#0b0b0b;
+    --card:#111111;
+    --card-hover:#171717;
+
+    --gold:#d4af37;
+    --gold-soft:#f2d675;
+    --gold-dark:#8c6a12;
+
+    --border:#262626;
+    --border-gold:rgba(212,175,55,.25);
+
+    --text:#ffffff;
+    --muted:#a1a1aa;
+
+    --success:#16a34a;
+    --danger:#dc2626;
+
+    --radius:18px;
+    --transition:.25s ease;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-
-/* Layout Utama */
-.container { max-width: 1200px; margin: auto; padding: 24px; }
-.grid { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
-
-/* Topbar */
-.topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(5, 7, 13, .95); backdrop-filter: blur(12px); z-index: 100; }
-.brand { display: flex; align-items: center; gap: 12px; }
-
-/* Kartu & Input */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
-input { width: 100%; margin-top: 12px; padding: 14px; background: #111827; color: white; border: 1px solid var(--border); border-radius: 12px; }
-input:focus { outline: none; border-color: var(--gold); }
-
-/* Accordion Utama */
-.accordion-item { margin-top: 15px; }
-.accordion-header { 
-    background: #1e293b; padding: 14px; border-radius: 12px; cursor: pointer; 
-    display: flex; justify-content: space-between; font-weight: 700; 
-    border: 1px solid var(--border); color: var(--gold); font-size: 14px;
-    transition: background 0.3s ease;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
-.accordion-header:hover { background: #26344d; }
-.accordion-content { display: none; padding: 10px 0; }
 
-/* Sub-fitur (Checkbox di dalam Accordion) */
-.feature-wrapper {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
+html{
+    scroll-behavior:smooth;
 }
-.feature-wrapper label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; }
-.hidden-input { display: none; margin-top: 8px; width: 100%; }
 
-/* Features & Checkboxes Utama */
-.features-box { margin-top: 24px; }
-.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-.checkbox-grid label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
-.features-box input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+body{
+    background:
+        radial-gradient(circle at top right,
+        rgba(212,175,55,.08),
+        transparent 35%),
+        var(--bg);
 
-/* Button & Responsiveness */
-button { 
-    cursor: pointer; border: none; padding: 14px 18px; border-radius: 12px; 
-    background: linear-gradient(135deg, var(--gold), var(--blue)); 
-    color: white; font-weight: 700; width: 100%; transition: opacity 0.2s;
+    color:var(--text);
+
+    font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+    min-height:100vh;
 }
-button:hover { opacity: 0.9; }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-@media(max-width: 900px) {
-    .grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 28px; }
-    .wallet-info { grid-template-columns: 1fr; }
+/* =======================================================
+   SCROLLBAR
+======================================================= */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#090909;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--gold);
+    border-radius:50px;
+}
+
+/* =======================================================
+   APP
+======================================================= */
+
+#app{
+    min-height:100vh;
+}
+
+/* =======================================================
+   TOPBAR
+======================================================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:16px 24px;
+
+    backdrop-filter:blur(14px);
+
+    background:rgba(5,5,5,.88);
+
+    border-bottom:1px solid var(--border);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand img{
+    width:42px;
+    height:42px;
+    object-fit:contain;
+}
+
+.brand span{
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--gold);
+}
+
+/* =======================================================
+   BUTTONS
+======================================================= */
+
+button{
+    border:none;
+    cursor:pointer;
+
+    border-radius:14px;
+
+    transition:all .25s ease;
+
+    font-weight:700;
+}
+
+#connectBtn{
+    width:auto;
+    padding:12px 20px;
+
+    background:linear-gradient(
+        135deg,
+        var(--gold),
+        var(--gold-dark)
+    );
+
+    color:#000;
+}
+
+#connectBtn:hover{
+    transform:translateY(-2px);
+}
+
+#deployBtn{
+    width:100%;
+    padding:16px;
+
+    margin-top:20px;
+
+    font-size:15px;
+
+    background:linear-gradient(
+        135deg,
+        var(--gold-soft),
+        var(--gold)
+    );
+
+    color:#000;
+
+    box-shadow:
+    0 10px 30px rgba(212,175,55,.25);
+}
+
+#deployBtn:hover{
+    transform:translateY(-2px);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+/* =======================================================
+   LAYOUT
+======================================================= */
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:24px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:
+    minmax(0,1fr)
+    380px;
+
+    gap:24px;
+
+    align-items:start;
+}
+
+/* =======================================================
+   CARD
+======================================================= */
+
+.card{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:24px;
+
+    transition:var(--transition);
+}
+
+.card:hover{
+    border-color:var(--border-gold);
+}
+
+.card h2{
+    margin-bottom:20px;
+
+    font-size:20px;
+
+    color:var(--gold);
+}
+
+/* =======================================================
+   INPUT
+======================================================= */
+
+input,
+textarea,
+select{
+    width:100%;
+
+    padding:14px 16px;
+
+    margin-top:12px;
+
+    border-radius:14px;
+
+    border:1px solid var(--border);
+
+    background:#0d0d0d;
+
+    color:#fff;
+
+    transition:var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    outline:none;
+
+    border-color:var(--gold);
+
+    box-shadow:
+    0 0 0 3px rgba(212,175,55,.15);
+}
+
+input::placeholder{
+    color:#666;
+}
+
+/* =======================================================
+   ACCORDION
+======================================================= */
+
+.accordion-item{
+    margin-top:18px;
+}
+
+.accordion-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:16px;
+
+    cursor:pointer;
+
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+
+    color:var(--gold);
+
+    font-weight:700;
+
+    transition:var(--transition);
+}
+
+.accordion-header:hover{
+    border-color:var(--gold);
+}
+
+.accordion-content{
+    display:none;
+    padding-top:12px;
+}
+
+/* =======================================================
+   FEATURE BOX
+======================================================= */
+
+.feature-wrapper{
+    padding:14px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+}
+
+.feature-wrapper label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    cursor:pointer;
+
+    font-size:14px;
+}
+
+.feature-wrapper input[type="checkbox"]{
+    width:18px;
+    height:18px;
+
+    accent-color:var(--gold);
+}
+
+.hidden-input{
+    display:none;
+}
+
+/* =======================================================
+   SUMMARY
+======================================================= */
+
+#summary{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+}
+
+.summary-row span{
+    color:var(--muted);
+}
+
+.summary-row strong{
+    color:var(--gold);
+}
+
+/* =======================================================
+   STATUS BOX
+======================================================= */
+
+.status-box{
+    margin-top:16px;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+
+    font-size:14px;
+
+    color:var(--gold);
+}
+
+/* =======================================================
+   WALLET INFO
+======================================================= */
+
+.wallet-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+
+    margin-top:16px;
+}
+
+.wallet-card{
+    padding:14px;
+
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+}
+
+.wallet-card small{
+    display:block;
+    color:var(--muted);
+    margin-bottom:4px;
+}
+
+.wallet-card strong{
+    color:var(--gold);
+}
+
+/* =======================================================
+   DEPLOY RESULT
+======================================================= */
+
+.deploy-result{
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(212,175,55,.08),
+        rgba(212,175,55,.02)
+    );
+
+    border:1px solid var(--border-gold);
+}
+
+.deploy-result h3{
+    color:var(--gold);
+    margin-bottom:12px;
+}
+
+.deploy-result a{
+    color:var(--gold-soft);
+    text-decoration:none;
+}
+
+.deploy-result a:hover{
+    text-decoration:underline;
+}
+
+/* =======================================================
+   MOBILE
+======================================================= */
+
+@media (max-width:1024px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        padding:16px;
+    }
+
+    .topbar{
+        padding:14px 16px;
+    }
+
+    .brand span{
+        font-size:16px;
+    }
+
+    .card{
+        padding:18px;
+    }
+}
+
+@media (max-width:640px){
+
+    .wallet-info{
+        grid-template-columns:1fr;
+    }
+
+    #connectBtn{
+        padding:10px 14px;
+        font-size:13px;
+    }
+
+    .brand img{
+        width:34px;
+        height:34px;
+    }
+
+    .brand span{
+        font-size:14px;
+    }
+
+    input{
+        padding:13px;
+    }
+
+    #deployBtn{
+        padding:15px;
+    }
 }
