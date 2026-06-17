@@ -1,120 +1,463 @@
-import { connectWallet, getSigner, getAddress } from "./wallet.js";
-import { loadBalances } from "./balance.js";
-import { loadFactory, loadEvozx, buildTokenConfig, validateConfig } from "./deploy.js";
-import { CONFIG } from "./config.js";
+import {
+    connectWallet,
+    getSigner,
+    getAddress
+} from "./wallet.js";
 
-// =========================================================
-// 1. UI: ACCORDION & INPUT TOGGLE
-// =========================================================
-window.toggleAcc = function(el) {
-    const content = el.nextElementSibling;
-    content.style.display = (content.style.display === "block") ? "none" : "block";
+import {
+    loadBalances
+} from "./balance.js";
+
+import {
+    loadFactory,
+    loadEvozx,
+    buildTokenConfig,
+    validateConfig
+} from "./deploy.js";
+
+import {
+    CONFIG
+} from "./config.js";
+
+/* =========================================================
+   UI HELPERS
+========================================================= */
+
+const connectBtn =
+    document.getElementById("connectBtn");
+
+const deployBtn =
+    document.getElementById("deployBtn");
+
+const feeEvozxEl =
+    document.getElementById("evozxFee");
+
+const feeEvozEl =
+    document.getElementById("evozFee");
+
+const statusEl =
+    document.getElementById("deployStatus");
+
+function setStatus(text) {
+
+    if (statusEl) {
+        statusEl.textContent = text;
+    }
+
+    console.log(text);
+}
+
+window.toggleAcc = function (header) {
+
+    const content =
+        header.nextElementSibling;
+
+    if (!content) return;
+
+    content.style.display =
+        content.style.display === "block"
+            ? "none"
+            : "block";
 };
 
-window.toggleInput = function(checkbox) {
-    const wrapper = checkbox.closest('.feature-wrapper');
-    const input = wrapper.querySelector('.hidden-input');
-    if (input) {
-        input.style.display = checkbox.checked ? "block" : "none";
-        input.disabled = !checkbox.checked;
-        if (!checkbox.checked) input.value = "";
+window.toggleInput = function (checkbox) {
+
+    const wrapper =
+        checkbox.closest(".feature-wrapper");
+
+    if (!wrapper) return;
+
+    const input =
+        wrapper.querySelector(".hidden-input");
+
+    if (!input) return;
+
+    input.disabled =
+        !checkbox.checked;
+
+    input.style.display =
+        checkbox.checked
+            ? "block"
+            : "none";
+
+    if (!checkbox.checked) {
+        input.value = "";
     }
-    updateFee(); 
+
+    updateFee();
 };
 
-// =========================================================
-// 2. WALLET & UI LOGIC
-// =========================================================
-const connectBtn = document.getElementById("connectBtn");
+/* =========================================================
+   WALLET
+========================================================= */
 
-connectBtn.addEventListener("click", async () => {
-    try {
-        const wallet = await connectWallet();
-        if (!wallet) return;
+async function refreshBalances() {
 
-        const shortAddress = wallet.address.slice(0, 6) + "..." + wallet.address.slice(-4);
-        connectBtn.textContent = shortAddress;
-        document.getElementById("walletAddress").textContent = shortAddress;
+    const signer =
+        getSigner();
 
-        const balances = await loadBalances(wallet.provider, wallet.address);
-        document.getElementById("evozBalance").textContent = Number(balances.evoz).toFixed(4);
-        document.getElementById("evozxBalance").textContent = Number(balances.evozx).toFixed(4);
-    } catch (error) {
-        console.error(error);
-        alert(error.message || "Wallet connection failed");
+    if (!signer) return;
+
+    const balances =
+        await loadBalances(
+            signer.provider,
+            getAddress()
+        );
+
+    const evozBalance =
+        document.getElementById(
+            "evozBalance"
+        );
+
+    const evozxBalance =
+        document.getElementById(
+            "evozxBalance"
+        );
+
+    if (evozBalance) {
+        evozBalance.textContent =
+            Number(
+                balances.evoz
+            ).toFixed(4);
     }
-});
 
-// =========================================================
-// 3. FEE CALCULATOR (Langsung dari Factory Contract)
-// =========================================================
-async function updateFee() {
-    try {
-        const signer = getSigner();
-        if (!signer) return;
-
-        const factory = await loadFactory(signer);
-        const config = buildTokenConfig(getAddress()); // Pastikan fungsi ini tersedia di deploy.js
-        
-        // Mengambil biaya langsung dari smart contract
-        const fee = await factory.getDeploymentFee(config);
-        
-        document.getElementById("evozxFee").textContent = fee.toString();
-        document.getElementById("evozFee").textContent = (Number(fee) * 5).toString(); // Jika ada multiplier
-    } catch (error) {
-        console.log("Fee calculation skipped (Wallet not ready)");
+    if (evozxBalance) {
+        evozxBalance.textContent =
+            Number(
+                balances.evozx
+            ).toFixed(4);
     }
 }
 
-// Event Listeners: Trigger update saat ada perubahan input
-document.addEventListener("change", (e) => { 
-    if (e.target.tagName === "INPUT") updateFee(); 
-});
-document.addEventListener("input", (e) => { 
-    if (e.target.tagName === "INPUT") updateFee(); 
-});
+connectBtn?.addEventListener(
+    "click",
+    async () => {
 
-// =========================================================
-// 4. DEPLOYMENT LOGIC
-// =========================================================
-const deployBtn = document.getElementById("deployBtn");
+        try {
 
-deployBtn.addEventListener("click", async () => {
-    try {
-        deployBtn.disabled = true;
-        const signer = getSigner();
-        if(!signer) throw new Error("Connect wallet first");
+            const wallet =
+                await connectWallet();
 
-        const factory = await loadFactory(signer);
-        const config = buildTokenConfig(getAddress());
-        validateConfig(config);
+            if (!wallet) return;
 
-        const evozx = await loadEvozx(signer);
-        const fee = await factory.getDeploymentFee(config);
-        
-        const balance = await evozx.balanceOf(getAddress());
-        if(balance < fee) throw new Error("Insufficient EVOZX balance");
+            const shortAddress =
+                wallet.address.slice(0, 6) +
+                "..." +
+                wallet.address.slice(-4);
 
-        const allowance = await evozx.allowance(getAddress(), CONFIG.FACTORY);
-        if(allowance < fee) {
-            const approveTx = await evozx.approve(CONFIG.FACTORY, fee);
-            await approveTx.wait();
+            connectBtn.textContent =
+                shortAddress;
+
+            const walletAddressEl =
+                document.getElementById(
+                    "walletAddress"
+                );
+
+            if (walletAddressEl) {
+                walletAddressEl.textContent =
+                    shortAddress;
+            }
+
+            await refreshBalances();
+
+            await updateFee();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.message ||
+                "Wallet connection failed"
+            );
         }
-
-        const tx = await factory.createToken(config);
-        const receipt = await tx.wait();
-
-        const event = receipt.logs.map(l => {
-            try { return factory.interface.parseLog(l); } catch { return null; }
-        }).find(e => e?.name === "TokenCreated");
-
-        if(!event) throw new Error("Token address not found");
-
-        alert(`Token deployed successfully!\n\nAddress: ${event.args.token}`);
-    } catch(error) {
-        console.error(error);
-        alert(error.message);
-    } finally {
-        deployBtn.disabled = false;
     }
-});
+);
+
+/* =========================================================
+   FEE CALCULATOR
+========================================================= */
+
+let feeTimeout;
+
+async function updateFee() {
+
+    clearTimeout(feeTimeout);
+
+    feeTimeout = setTimeout(
+        async () => {
+
+            try {
+
+                const signer =
+                    getSigner();
+
+                if (!signer) return;
+
+                const factory =
+                    await loadFactory(
+                        signer
+                    );
+
+                const config =
+                    buildTokenConfig(
+                        getAddress()
+                    );
+
+                const fee =
+                    await factory.getDeploymentFee(
+                        config
+                    );
+
+                const feeEVOZX =
+                    Number(
+                        ethers.formatEther(
+                            fee
+                        )
+                    );
+
+                const feeEVOZ =
+                    feeEVOZX * 5;
+
+                if (feeEvozxEl) {
+                    feeEvozxEl.textContent =
+                        feeEVOZX.toFixed(2);
+                }
+
+                if (feeEvozEl) {
+                    feeEvozEl.textContent =
+                        feeEVOZ.toFixed(2);
+                }
+
+            } catch (error) {
+
+                console.log(
+                    "Fee update skipped:",
+                    error.message
+                );
+            }
+
+        },
+        300
+    );
+}
+
+document.addEventListener(
+    "input",
+    (event) => {
+
+        if (
+            event.target.matches(
+                "input,select,textarea"
+            )
+        ) {
+            updateFee();
+        }
+    }
+);
+
+document.addEventListener(
+    "change",
+    (event) => {
+
+        if (
+            event.target.matches(
+                "input,select,textarea"
+            )
+        ) {
+            updateFee();
+        }
+    }
+);
+
+/* =========================================================
+   DEPLOY
+========================================================= */
+
+deployBtn?.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            deployBtn.disabled =
+                true;
+
+            setStatus(
+                "Preparing deployment..."
+            );
+
+            const signer =
+                getSigner();
+
+            if (!signer) {
+
+                throw new Error(
+                    "Connect wallet first"
+                );
+            }
+
+            const factory =
+                await loadFactory(
+                    signer
+                );
+
+            const evozx =
+                await loadEvozx(
+                    signer
+                );
+
+            const config =
+                buildTokenConfig(
+                    getAddress()
+                );
+
+            validateConfig(
+                config
+            );
+
+            setStatus(
+                "Calculating fee..."
+            );
+
+            const fee =
+                await factory.getDeploymentFee(
+                    config
+                );
+
+            const balance =
+                await evozx.balanceOf(
+                    getAddress()
+                );
+
+            if (balance < fee) {
+
+                throw new Error(
+                    `Insufficient EVOZX balance.
+Required: ${ethers.formatEther(fee)} EVOZX`
+                );
+            }
+
+            setStatus(
+                "Checking allowance..."
+            );
+
+            const allowance =
+                await evozx.allowance(
+                    getAddress(),
+                    CONFIG.FACTORY
+                );
+
+            if (allowance < fee) {
+
+                setStatus(
+                    "Approve EVOZX..."
+                );
+
+                const approveTx =
+                    await evozx.approve(
+                        CONFIG.FACTORY,
+                        fee
+                    );
+
+                await approveTx.wait();
+            }
+
+            setStatus(
+                "Deploying token..."
+            );
+
+            const tx =
+                await factory.createToken(
+                    config
+                );
+
+            const receipt =
+                await tx.wait();
+
+            let tokenAddress =
+                null;
+
+            for (const log of receipt.logs) {
+
+                try {
+
+                    const parsed =
+                        factory.interface.parseLog(
+                            log
+                        );
+
+                    if (
+                        parsed &&
+                        parsed.name ===
+                            "TokenCreated"
+                    ) {
+
+                        tokenAddress =
+                            parsed.args.token;
+
+                        break;
+                    }
+
+                } catch {}
+            }
+
+            if (!tokenAddress) {
+
+                throw new Error(
+                    "TokenCreated event not found"
+                );
+            }
+
+            await refreshBalances();
+
+            setStatus(
+                "Deployment completed"
+            );
+
+            const explorer =
+                `${CONFIG.EXPLORER}/token/${tokenAddress}`;
+
+            alert(
+`🚀 TOKEN DEPLOYED
+
+Address:
+${tokenAddress}
+
+Explorer:
+${explorer}`
+            );
+
+            console.log(
+                "TOKEN DEPLOYED:",
+                tokenAddress
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            setStatus(
+                "Deployment failed"
+            );
+
+            alert(
+                error.reason ||
+                error.shortMessage ||
+                error.message ||
+                "Deployment failed"
+            );
+
+        } finally {
+
+            deployBtn.disabled =
+                false;
+        }
+    }
+);
+
+/* =========================================================
+   INIT
+========================================================= */
+
+updateFee();
