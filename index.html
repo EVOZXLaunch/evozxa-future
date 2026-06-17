@@ -1,364 +1,353 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-/><title>EVOZXA FUTURE</title><link rel="stylesheet" href="./css/app.css"/><script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script></head><body><div id="app"><!-- ========================= -->
-<!-- TOPBAR -->
-<!-- ========================= -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<header class="topbar">
+<title>EVOZXA FUTURE</title>
 
-    <div class="brand">
+<link rel="stylesheet" href="./css/app.css">
 
-        <img
-            src="./images/logo.png"
-            alt="EVOZXA FUTURE"
-            class="logo"
-        />
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+</head>
 
-        <div class="brand-info">
+<body>
 
-            <h1>EVOZXA FUTURE</h1>
+<div id="app">
 
-            <span>
-                Deploy • Verify • Manage
-            </span>
+    <!-- ========================================= -->
+    <!-- TOPBAR -->
+    <!-- ========================================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <img
+                src="./images/logo.png"
+                alt="EVOZXA FUTURE"
+                class="logo"
+            >
+
+            <div class="brand-info">
+                <h1>EVOZXA FUTURE</h1>
+                <span>Deploy • Verify • Manage</span>
+            </div>
 
         </div>
 
-    </div>
+        <button id="connectBtn">
+            Connect Wallet
+        </button>
 
-    <button id="connectBtn">
-        Connect Wallet
-    </button>
+    </header>
 
-</header>
+    <!-- ========================================= -->
+    <!-- MAIN -->
+    <!-- ========================================= -->
 
-<!-- ========================= -->
-<!-- MAIN -->
-<!-- ========================= -->
+    <main class="container">
 
-<main class="container">
+        <div class="grid">
 
-    <div class="grid">
+            <!-- ========================================= -->
+            <!-- TOKEN CONFIG -->
+            <!-- ========================================= -->
 
-        <!-- ========================= -->
-        <!-- LEFT -->
-        <!-- ========================= -->
+            <section class="card">
 
-        <section class="card">
+                <div class="card-header">
+                    <h2>Token Configuration</h2>
+                    <p>Create ERC20 Tokens on EVOZ Mainnet</p>
+                </div>
 
-            <div class="card-header">
+                <form id="tokenForm">
 
-                <h2>
-                    Token Configuration
-                </h2>
-
-                <p>
-                    Create ERC20 tokens on EVOZ Mainnet
-                </p>
-
-            </div>
-
-            <form id="tokenForm">
-
-                <input
-                    id="name"
-                    type="text"
-                    placeholder="Token Name"
-                />
-
-                <input
-                    id="symbol"
-                    type="text"
-                    placeholder="Token Symbol"
-                />
-
-                <input
-                    id="supply"
-                    type="number"
-                    placeholder="Total Supply"
-                />
-
-                <!-- ========================= -->
-                <!-- CORE FEATURES -->
-                <!-- ========================= -->
-
-                <div class="accordion-item">
-
-                    <div
-                        class="accordion-header"
-                        onclick="toggleAcc(this)"
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="Token Name"
                     >
-                        CORE FEATURES
-                    </div>
 
-                    <div class="accordion-content">
+                    <input
+                        id="symbol"
+                        type="text"
+                        placeholder="Token Symbol"
+                    >
 
-                        <div class="checkbox-grid">
+                    <input
+                        id="supply"
+                        type="number"
+                        placeholder="Total Supply"
+                    >
 
-                            <label>
-                                <input
-                                    id="burnable"
-                                    type="checkbox"
-                                />
-                                Burnable
-                            </label>
+                    <!-- ========================================= -->
+                    <!-- CORE FEATURES -->
+                    <!-- ========================================= -->
 
-                            <label>
-                                <input
-                                    id="mintable"
-                                    type="checkbox"
-                                />
-                                Mintable
-                            </label>
+                    <div class="accordion-item">
 
-                            <label>
-                                <input
-                                    id="ownership"
-                                    type="checkbox"
-                                />
-                                Ownership
-                            </label>
+                        <div
+                            class="accordion-header"
+                            onclick="toggleAcc(this)"
+                        >
+                            CORE FEATURES
+                        </div>
+
+                        <div class="accordion-content">
+
+                            <div class="feature-list">
+
+                                <label class="feature-item">
+                                    <input
+                                        id="burnable"
+                                        type="checkbox"
+                                    >
+                                    <span>Burnable</span>
+                                </label>
+
+                                <label class="feature-item">
+                                    <input
+                                        id="mintable"
+                                        type="checkbox"
+                                    >
+                                    <span>Mintable</span>
+                                </label>
+
+                                <label class="feature-item">
+                                    <input
+                                        id="ownership"
+                                        type="checkbox"
+                                    >
+                                    <span>Ownership Control</span>
+                                </label>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                    <!-- ========================================= -->
+                    <!-- METADATA -->
+                    <!-- ========================================= -->
 
-                <!-- ========================= -->
-                <!-- METADATA -->
-                <!-- ========================= -->
+                    <div class="accordion-item">
 
-                <div class="accordion-item">
+                        <div
+                            class="accordion-header"
+                            onclick="toggleAcc(this)"
+                        >
+                            METADATA
+                        </div>
 
-                    <div
-                        class="accordion-header"
-                        onclick="toggleAcc(this)"
-                    >
-                        METADATA
-                    </div>
+                        <div class="accordion-content">
 
-                    <div class="accordion-content">
-
-                        <input
-                            id="websiteUrl"
-                            type="text"
-                            placeholder="Website URL"
-                        />
-
-                        <input
-                            id="telegramUrl"
-                            type="text"
-                            placeholder="Telegram URL"
-                        />
-
-                        <input
-                            id="twitterUrl"
-                            type="text"
-                            placeholder="Twitter URL"
-                        />
-
-                        <input
-                            id="logoUrl"
-                            type="text"
-                            placeholder="Logo URL"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- ========================= -->
-                <!-- TOKEN LIMITS -->
-                <!-- ========================= -->
-
-                <div class="accordion-item">
-
-                    <div
-                        class="accordion-header"
-                        onclick="toggleAcc(this)"
-                    >
-                        LIMITS
-                    </div>
-
-                    <div class="accordion-content">
-
-                        <label>
                             <input
-                                id="maxWallet"
-                                type="checkbox"
-                            />
-                            Max Wallet
-                        </label>
+                                id="websiteUrl"
+                                type="text"
+                                placeholder="Website URL"
+                            >
 
-                        <input
-                            id="maxWalletValue"
-                            type="number"
-                            placeholder="Max Wallet %"
-                        />
-
-                        <label>
                             <input
-                                id="maxTx"
-                                type="checkbox"
-                            />
-                            Max Transaction
-                        </label>
+                                id="telegramUrl"
+                                type="text"
+                                placeholder="Telegram URL"
+                            >
 
-                        <input
-                            id="maxTxValue"
-                            type="number"
-                            placeholder="Max Transaction %"
-                        />
+                            <input
+                                id="twitterUrl"
+                                type="text"
+                                placeholder="Twitter URL"
+                            >
+
+                            <input
+                                id="logoUrl"
+                                type="text"
+                                placeholder="Logo URL"
+                            >
+
+                        </div>
 
                     </div>
 
-                </div>
+                    <!-- ========================================= -->
+                    <!-- LIMITS -->
+                    <!-- ========================================= -->
 
-            </form>
+                    <div class="accordion-item">
 
-        </section>
+                        <div
+                            class="accordion-header"
+                            onclick="toggleAcc(this)"
+                        >
+                            LIMITS
+                        </div>
 
-        <!-- ========================= -->
-        <!-- RIGHT -->
-        <!-- ========================= -->
+                        <div class="accordion-content">
 
-        <aside class="sidebar">
+                            <label class="feature-item">
+                                <input
+                                    id="maxWallet"
+                                    type="checkbox"
+                                >
+                                <span>Enable Max Wallet</span>
+                            </label>
 
-            <!-- Wallet -->
+                            <input
+                                id="maxWalletValue"
+                                type="number"
+                                placeholder="Max Wallet %"
+                            >
 
-            <section class="card">
+                            <label class="feature-item">
+                                <input
+                                    id="maxTx"
+                                    type="checkbox"
+                                >
+                                <span>Enable Max Transaction</span>
+                            </label>
 
-                <h2>
-                    Wallet
-                </h2>
+                            <input
+                                id="maxTxValue"
+                                type="number"
+                                placeholder="Max Transaction %"
+                            >
 
-                <div class="wallet-box">
+                        </div>
 
-                    <div class="wallet-row">
-                        <span>Address</span>
-                        <strong id="walletAddress">
-                            Not Connected
-                        </strong>
                     </div>
 
-                    <div class="wallet-row">
-                        <span>EVOZ</span>
-                        <strong id="evozBalance">
-                            0.0000
-                        </strong>
-                    </div>
-
-                    <div class="wallet-row">
-                        <span>EVOZX</span>
-                        <strong id="evozxBalance">
-                            0.0000
-                        </strong>
-                    </div>
-
-                </div>
+                </form>
 
             </section>
 
-            <!-- Summary -->
+            <!-- ========================================= -->
+            <!-- SIDEBAR -->
+            <!-- ========================================= -->
 
-            <section class="card">
+            <aside class="sidebar">
 
-                <h2>
-                    Deployment Summary
-                </h2>
+                <!-- Wallet -->
 
-                <div id="summary">
+                <section class="card">
 
-                    <div class="summary-row">
-                        <span>Deployment Fee</span>
-                        <strong id="evozxFee">
-                            0
-                        </strong>
+                    <h2>Wallet</h2>
+
+                    <div class="wallet-box">
+
+                        <div class="wallet-row">
+                            <span>Address</span>
+                            <strong id="walletAddress">
+                                Not Connected
+                            </strong>
+                        </div>
+
+                        <div class="wallet-row">
+                            <span>EVOZ</span>
+                            <strong id="evozBalance">
+                                0.0000
+                            </strong>
+                        </div>
+
+                        <div class="wallet-row">
+                            <span>EVOZX</span>
+                            <strong id="evozxBalance">
+                                0.0000
+                            </strong>
+                        </div>
+
                     </div>
 
-                    <div class="summary-row">
-                        <span>Required EVOZ</span>
-                        <strong id="evozFee">
-                            0
-                        </strong>
+                </section>
+
+                <!-- Summary -->
+
+                <section class="card">
+
+                    <h2>Deployment Summary</h2>
+
+                    <div id="summary">
+
+                        <div class="summary-row">
+                            <span>Deployment Fee</span>
+                            <strong id="evozxFee">0</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Required EVOZ</span>
+                            <strong id="evozFee">0</strong>
+                        </div>
+
                     </div>
 
-                </div>
+                    <button id="deployBtn">
+                        Deploy Token
+                    </button>
 
-                <button id="deployBtn">
-                    Deploy Token
-                </button>
+                    <div
+                        id="deployStatus"
+                        class="deploy-status"
+                    >
+                        Ready
+                    </div>
 
-                <div
-                    id="deployStatus"
-                    class="deploy-status"
+                </section>
+
+                <!-- Deployment Result -->
+
+                <section
+                    id="deploymentResult"
+                    class="card hidden"
                 >
-                    Ready
-                </div>
 
-            </section>
+                    <h2>Deployment Result</h2>
 
-            <!-- Result -->
+                    <div class="result-box">
 
-            <section
-                id="deploymentResult"
-                class="card hidden"
-            >
+                        <div class="wallet-row">
+                            <span>Token Address</span>
+                            <strong id="tokenAddress">
+                                -
+                            </strong>
+                        </div>
 
-                <h2>
-                    Deployment Result
-                </h2>
+                        <div class="wallet-row">
+                            <span>Explorer</span>
 
-                <div class="result-box">
+                            <a
+                                id="explorerLink"
+                                target="_blank"
+                            >
+                                Open
+                            </a>
+                        </div>
 
-                    <div class="wallet-row">
-                        <span>Token Address</span>
-                        <strong id="tokenAddress">
-                            -
-                        </strong>
-                    </div>
+                        <div class="wallet-row">
+                            <span>Verification Package</span>
 
-                    <div class="wallet-row">
-                        <span>Explorer</span>
-
-                        <a
-                            id="explorerLink"
-                            target="_blank"
-                        >
-                            Open
-                        </a>
-                    </div>
-
-                    <div class="wallet-row">
-
-                        <span>
-                            Verification Package
-                        </span>
-
-                        <a
-                            id="verificationLink"
-                            target="_blank"
-                            download
-                        >
-                            Download
-                        </a>
+                            <a
+                                id="verificationLink"
+                                target="_blank"
+                                download
+                            >
+                                Download
+                            </a>
+                        </div>
 
                     </div>
 
-                </div>
+                </section>
 
-            </section>
+            </aside>
 
-        </aside>
+        </div>
 
-    </div>
+    </main>
 
-</main>
+</div>
 
-</div><script type="module" src="./js/app.js"></script></body>
+<script type="module" src="./js/app.js"></script>
+
+</body>
 </html>
