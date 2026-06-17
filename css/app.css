@@ -661,3 +661,96 @@ input[type="checkbox"]{
         text-align:left;
     }
 }
+
+FOOTER
+========================================================== */
+
+footer{
+
+margin-top:64px;
+
+border-top:
+
+1px solid var(--border);
+
+background:
+
+rgba(255,255,255,.02);
+
+}
+
+.footer-grid{
+
+display:grid;
+
+grid-template-columns:
+
+2fr
+1fr
+1fr;
+
+gap:48px;
+
+padding:
+
+56px 0;
+
+}
+
+.footer-logo{
+
+width:56px;
+
+margin-bottom:18px;
+
+}
+
+.footer-grid h4{
+
+margin-bottom:18px;
+
+font-size:1rem;
+
+}
+
+.footer-grid a{
+
+display:block;
+
+margin-bottom:10px;
+
+color:var(--muted);
+
+transition:.25s;
+
+}
+
+.footer-grid a:hover{
+
+color:var(--gold);
+
+}
+
+.footer-grid p{
+
+margin-bottom:10px;
+
+}
+
+.footer-bottom{
+
+padding:
+
+24px;
+
+text-align:center;
+
+border-top:
+
+1px solid var(--border);
+
+color:var(--muted);
+
+font-size:.9rem;
+
+}
