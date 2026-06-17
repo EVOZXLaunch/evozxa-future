@@ -5,7 +5,7 @@
     --card-hover:#171717;
 
     --gold:#d4af37;
-    --gold-soft:#f2d675;
+    --gold-soft:#f4d878;
     --gold-dark:#8c6a12;
 
     --border:#262626;
@@ -32,26 +32,28 @@ html{
 }
 
 body{
+    min-height:100vh;
+
     background:
-        radial-gradient(circle at top right,
-        rgba(212,175,55,.08),
-        transparent 35%),
-        var(--bg);
+        radial-gradient(
+            circle at top right,
+            rgba(212,175,55,.08),
+            transparent 35%
+        ),
+        #050505;
 
     color:var(--text);
 
     font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-    min-height:100vh;
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
 
-/* =======================================================
+/* =========================================================
    SCROLLBAR
-======================================================= */
+========================================================= */
 
 ::-webkit-scrollbar{
     width:8px;
@@ -63,20 +65,20 @@ body{
 
 ::-webkit-scrollbar-thumb{
     background:var(--gold);
-    border-radius:50px;
+    border-radius:999px;
 }
 
-/* =======================================================
+/* =========================================================
    APP
-======================================================= */
+========================================================= */
 
 #app{
     min-height:100vh;
 }
 
-/* =======================================================
+/* =========================================================
    TOPBAR
-======================================================= */
+========================================================= */
 
 .topbar{
     position:sticky;
@@ -87,11 +89,13 @@ body{
     align-items:center;
     justify-content:space-between;
 
+    gap:16px;
+
     padding:16px 24px;
 
     backdrop-filter:blur(14px);
 
-    background:rgba(5,5,5,.88);
+    background:rgba(5,5,5,.9);
 
     border-bottom:1px solid var(--border);
 }
@@ -99,46 +103,58 @@ body{
 .brand{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
 }
 
-.brand img{
-    width:42px;
-    height:42px;
+.logo{
+    width:46px;
+    height:46px;
     object-fit:contain;
 }
 
-.brand span{
-    font-size:18px;
+.brand-info{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.brand-info h1{
+    font-size:20px;
     font-weight:800;
-    letter-spacing:.5px;
     color:var(--gold);
 }
 
-/* =======================================================
-   BUTTONS
-======================================================= */
+.brand-info span{
+    font-size:12px;
+    color:var(--muted);
+}
+
+/* =========================================================
+   BUTTON
+========================================================= */
 
 button{
     border:none;
     cursor:pointer;
 
+    font-weight:700;
+
     border-radius:14px;
 
     transition:all .25s ease;
-
-    font-weight:700;
 }
 
 #connectBtn{
     width:auto;
-    padding:12px 20px;
 
-    background:linear-gradient(
-        135deg,
-        var(--gold),
-        var(--gold-dark)
-    );
+    padding:12px 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-soft),
+            var(--gold)
+        );
 
     color:#000;
 }
@@ -149,22 +165,24 @@ button{
 
 #deployBtn{
     width:100%;
+
     padding:16px;
 
-    margin-top:20px;
+    margin-top:18px;
 
-    font-size:15px;
-
-    background:linear-gradient(
-        135deg,
-        var(--gold-soft),
-        var(--gold)
-    );
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-soft),
+            var(--gold)
+        );
 
     color:#000;
 
+    font-size:15px;
+
     box-shadow:
-    0 10px 30px rgba(212,175,55,.25);
+        0 10px 30px rgba(212,175,55,.18);
 }
 
 #deployBtn:hover{
@@ -176,9 +194,9 @@ button:disabled{
     cursor:not-allowed;
 }
 
-/* =======================================================
+/* =========================================================
    LAYOUT
-======================================================= */
+========================================================= */
 
 .container{
     max-width:1400px;
@@ -188,18 +206,25 @@ button:disabled{
 
 .grid{
     display:grid;
+
     grid-template-columns:
-    minmax(0,1fr)
-    380px;
+        minmax(0,1fr)
+        380px;
 
     gap:24px;
 
     align-items:start;
 }
 
-/* =======================================================
+.sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+}
+
+/* =========================================================
    CARD
-======================================================= */
+========================================================= */
 
 .card{
     background:var(--card);
@@ -217,26 +242,38 @@ button:disabled{
     border-color:var(--border-gold);
 }
 
-.card h2{
+.card-header{
     margin-bottom:20px;
-
-    font-size:20px;
-
-    color:var(--gold);
 }
 
-/* =======================================================
+.card-header h2{
+    font-size:22px;
+    color:var(--gold);
+    margin-bottom:6px;
+}
+
+.card-header p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.card h2{
+    color:var(--gold);
+    margin-bottom:16px;
+}
+
+/* =========================================================
    INPUT
-======================================================= */
+========================================================= */
 
 input,
 textarea,
 select{
     width:100%;
 
-    padding:14px 16px;
-
     margin-top:12px;
+
+    padding:14px 16px;
 
     border-radius:14px;
 
@@ -249,6 +286,10 @@ select{
     transition:var(--transition);
 }
 
+input::placeholder{
+    color:#666;
+}
+
 input:focus,
 textarea:focus,
 select:focus{
@@ -257,16 +298,12 @@ select:focus{
     border-color:var(--gold);
 
     box-shadow:
-    0 0 0 3px rgba(212,175,55,.15);
+        0 0 0 3px rgba(212,175,55,.15);
 }
 
-input::placeholder{
-    color:#666;
-}
-
-/* =======================================================
+/* =========================================================
    ACCORDION
-======================================================= */
+========================================================= */
 
 .accordion-item{
     margin-top:18px;
@@ -274,12 +311,10 @@ input::placeholder{
 
 .accordion-header{
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 
-    padding:16px;
-
-    cursor:pointer;
+    padding:15px 16px;
 
     border-radius:14px;
 
@@ -289,7 +324,10 @@ input::placeholder{
 
     color:var(--gold);
 
+    font-size:14px;
     font-weight:700;
+
+    cursor:pointer;
 
     transition:var(--transition);
 }
@@ -303,11 +341,76 @@ input::placeholder{
     padding-top:12px;
 }
 
-/* =======================================================
-   FEATURE BOX
-======================================================= */
+/* =========================================================
+   CHECKBOX GRID
+========================================================= */
+
+.checkbox-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+}
+
+/* =========================================================
+   FEATURE ROW
+========================================================= */
 
 .feature-wrapper{
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    padding:14px;
+
+    margin-bottom:12px;
+}
+
+/* =========================================================
+   FIX CHECKBOX ALIGNMENT
+========================================================= */
+
+.checkbox-grid label,
+.feature-wrapper label,
+.limit-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    cursor:pointer;
+
+    color:#fff;
+    font-size:14px;
+    font-weight:500;
+
+    min-height:22px;
+}
+
+/* CHECKBOX ALWAYS LEFT */
+
+.checkbox-grid input[type="checkbox"],
+.feature-wrapper input[type="checkbox"],
+.limit-label input[type="checkbox"]{
+    width:18px !important;
+    height:18px !important;
+
+    margin:0 !important;
+
+    flex-shrink:0;
+
+    accent-color:var(--gold);
+}
+
+.hidden-input{
+    display:none;
+}
+
+/* =========================================================
+   LIMIT BOX
+========================================================= */
+
+.limit-box{
     padding:14px;
 
     margin-bottom:12px;
@@ -319,35 +422,55 @@ input::placeholder{
     border:1px solid var(--border);
 }
 
-.feature-wrapper label{
+.limit-box input[type="number"]{
+    margin-top:12px;
+}
+
+/* =========================================================
+   WALLET
+========================================================= */
+
+.wallet-box{
     display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.wallet-row{
+    display:flex;
+    justify-content:space-between;
     align-items:center;
     gap:10px;
 
-    cursor:pointer;
+    padding:14px;
 
+    border-radius:14px;
+
+    background:#0d0d0d;
+
+    border:1px solid var(--border);
+
+    overflow-wrap:anywhere;
+}
+
+.wallet-row span{
+    color:var(--muted);
     font-size:14px;
 }
 
-.feature-wrapper input[type="checkbox"]{
-    width:18px;
-    height:18px;
-
-    accent-color:var(--gold);
+.wallet-row strong{
+    color:var(--gold);
+    text-align:right;
 }
 
-.hidden-input{
-    display:none;
-}
-
-/* =======================================================
+/* =========================================================
    SUMMARY
-======================================================= */
+========================================================= */
 
 #summary{
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:12px;
 }
 
 .summary-row{
@@ -372,102 +495,67 @@ input::placeholder{
     color:var(--gold);
 }
 
-/* =======================================================
-   STATUS BOX
-======================================================= */
+/* =========================================================
+   STATUS
+========================================================= */
 
-.status-box{
-    margin-top:16px;
+.deploy-status{
+    margin-top:14px;
 
-    padding:14px;
+    text-align:center;
 
-    border-radius:14px;
+    padding:12px;
+
+    border-radius:12px;
 
     background:#0d0d0d;
 
     border:1px solid var(--border);
 
-    font-size:14px;
-
     color:var(--gold);
+
+    font-size:13px;
 }
 
-/* =======================================================
-   WALLET INFO
-======================================================= */
+/* =========================================================
+   RESULT
+========================================================= */
 
-.wallet-info{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.result-box{
+    display:flex;
+    flex-direction:column;
     gap:12px;
-
-    margin-top:16px;
 }
 
-.wallet-card{
-    padding:14px;
-
-    border-radius:14px;
-
-    background:#0d0d0d;
-
-    border:1px solid var(--border);
-}
-
-.wallet-card small{
-    display:block;
-    color:var(--muted);
-    margin-bottom:4px;
-}
-
-.wallet-card strong{
+.result-box a{
     color:var(--gold);
-}
-
-/* =======================================================
-   DEPLOY RESULT
-======================================================= */
-
-.deploy-result{
-    margin-top:20px;
-
-    padding:18px;
-
-    border-radius:16px;
-
-    background:
-    linear-gradient(
-        180deg,
-        rgba(212,175,55,.08),
-        rgba(212,175,55,.02)
-    );
-
-    border:1px solid var(--border-gold);
-}
-
-.deploy-result h3{
-    color:var(--gold);
-    margin-bottom:12px;
-}
-
-.deploy-result a{
-    color:var(--gold-soft);
     text-decoration:none;
 }
 
-.deploy-result a:hover{
+.result-box a:hover{
     text-decoration:underline;
 }
 
-/* =======================================================
+.hidden{
+    display:none;
+}
+
+/* =========================================================
    MOBILE
-======================================================= */
+========================================================= */
 
 @media (max-width:1024px){
 
     .grid{
         grid-template-columns:1fr;
     }
+
+    .sidebar{
+        width:100%;
+    }
+}
+
+@media (max-width:768px){
 
     .container{
         padding:16px;
@@ -477,40 +565,41 @@ input::placeholder{
         padding:14px 16px;
     }
 
-    .brand span{
+    .brand-info h1{
         font-size:16px;
+    }
+
+    .brand-info span{
+        font-size:11px;
     }
 
     .card{
         padding:18px;
     }
+
+    .checkbox-grid{
+        grid-template-columns:1fr;
+    }
 }
 
-@media (max-width:640px){
+@media (max-width:480px){
 
-    .wallet-info{
-        grid-template-columns:1fr;
+    .logo{
+        width:38px;
+        height:38px;
     }
 
     #connectBtn{
-        padding:10px 14px;
-        font-size:13px;
+        font-size:12px;
+        padding:10px 12px;
     }
 
-    .brand img{
-        width:34px;
-        height:34px;
+    .wallet-row{
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-    .brand span{
-        font-size:14px;
-    }
-
-    input{
-        padding:13px;
-    }
-
-    #deployBtn{
-        padding:15px;
+    .wallet-row strong{
+        text-align:left;
     }
 }
