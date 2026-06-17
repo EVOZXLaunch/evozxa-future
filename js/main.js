@@ -1,133 +1,609 @@
-import { connectWallet, getSigner, getAddress, disconnectWallet } from "./wallet.js";
-import { loadBalances } from "./balance.js";
-import { loadFactory, loadEvozx, buildTokenConfig, validateConfig } from "./deploy.js";
-import { buyMissingEVOZX } from "./exchange.js";
-import { CONFIG } from "./config.js";
+import {
+    connectWallet,
+    disconnectWallet,
+    getSigner,
+    getAddress
+} from "./wallet.js";
 
-// =========================================================
-// 1. UI: ACCORDION & INPUT TOGGLE
-// =========================================================
-window.toggleAcc = function(el) {
-    const content = el.nextElementSibling;
-    content.style.display = (content.style.display === "block") ? "none" : "block";
+import {
+    loadBalances
+} from "./balance.js";
+
+import {
+    loadFactory,
+    loadEvozx,
+    buildTokenConfig,
+    validateConfig
+} from "./deploy.js";
+
+import {
+    buyMissingEVOZX
+} from "./exchange.js";
+
+import {
+    CONFIG
+} from "./config.js";
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const connectBtn = document.getElementById("connectBtn");
+const deployBtn = document.getElementById("deployBtn");
+
+const evozBalanceEl = document.getElementById("evozBalance");
+const evozxBalanceEl = document.getElementById("evozxBalance");
+
+const walletAddressEl = document.getElementById("walletAddress");
+
+const feeEvozxEl = document.getElementById("evozxFee");
+const feeEvozEl = document.getElementById("evozFee");
+
+const deployStatusEl = document.getElementById("deployStatus");
+
+const deploymentResultEl =
+    document.getElementById("deploymentResult");
+
+const tokenAddressEl =
+    document.getElementById("tokenAddress");
+
+const explorerLinkEl =
+    document.getElementById("explorerLink");
+
+const verificationLinkEl =
+    document.getElementById("verificationLink");
+
+/* =========================================================
+   UI HELPERS
+========================================================= */
+
+function setDeployStatus(text) {
+
+    console.log(text);
+
+    if (deployStatusEl) {
+        deployStatusEl.textContent = text;
+    }
+}
+
+window.toggleAcc = function(header) {
+
+    const content = header.nextElementSibling;
+
+    if (!content) return;
+
+    content.style.display =
+        content.style.display === "block"
+            ? "none"
+            : "block";
 };
 
 window.toggleInput = function(checkbox) {
-    const wrapper = checkbox.closest('.feature-wrapper');
-    const input = wrapper.querySelector('.hidden-input');
-    if (input) {
-        input.style.display = checkbox.checked ? "block" : "none";
-        input.disabled = !checkbox.checked;
-        if (!checkbox.checked) input.value = "";
+
+    const wrapper =
+        checkbox.closest(".feature-wrapper");
+
+    if (!wrapper) return;
+
+    const input =
+        wrapper.querySelector(".hidden-input");
+
+    if (!input) return;
+
+    input.disabled = !checkbox.checked;
+
+    input.style.display =
+        checkbox.checked
+            ? "block"
+            : "none";
+
+    if (!checkbox.checked) {
+        input.value = "";
     }
+
+    updateFee();
 };
 
-// =========================================================
-// 2. WALLET & UI LOGIC
-// =========================================================
-const connectBtn = document.getElementById("connectBtn");
+/* =========================================================
+   WALLET
+========================================================= */
 
 async function updateWalletUI(wallet) {
-    const addrEl = document.getElementById("walletAddress");
+
     if (!wallet) {
-        connectBtn.textContent = "Connect Wallet";
-        if (addrEl) addrEl.textContent = "Not Connected";
-        localStorage.removeItem("walletConnected");
+
+        if (connectBtn) {
+            connectBtn.textContent =
+                "Connect Wallet";
+        }
+
+        if (walletAddressEl) {
+            walletAddressEl.textContent =
+                "Not Connected";
+        }
+
+        localStorage.removeItem(
+            "walletConnected"
+        );
+
         return;
     }
-    const shortAddress = wallet.address.slice(0, 6) + "..." + wallet.address.slice(-4);
-    connectBtn.textContent = shortAddress;
-    if (addrEl) addrEl.textContent = shortAddress;
-    localStorage.setItem("walletConnected", "true");
-    
-    if (document.getElementById("evozBalance")) await refreshBalances();
-}
 
-connectBtn?.addEventListener("click", async () => {
-    if (localStorage.getItem("walletConnected") === "true") {
-        await disconnectWallet();
-        updateWalletUI(null);
-    } else {
-        try {
-            const wallet = await connectWallet();
-            if (wallet) updateWalletUI(wallet);
-        } catch (error) {
-            alert(error.message || "Wallet connection failed");
-        }
+    const shortAddress =
+        wallet.address.slice(0, 6) +
+        "..." +
+        wallet.address.slice(-4);
+
+    if (connectBtn) {
+        connectBtn.textContent =
+            shortAddress;
     }
-});
+
+    if (walletAddressEl) {
+        walletAddressEl.textContent =
+            shortAddress;
+    }
+
+    localStorage.setItem(
+        "walletConnected",
+        "true"
+    );
+
+    await refreshBalances();
+    await updateFee();
+}
 
 async function refreshBalances() {
-    const signer = getSigner();
-    if (!signer) return;
-    const balances = await loadBalances(signer.provider, getAddress());
-    const evozEl = document.getElementById("evozBalance");
-    const evozxEl = document.getElementById("evozxBalance");
-    if (evozEl) evozEl.textContent = Number(balances.evoz).toFixed(4);
-    if (evozxEl) evozxEl.textContent = Number(balances.evozx).toFixed(4);
-}
 
-// =========================================================
-// 3. DEPLOYMENT LOGIC
-// =========================================================
-const deployBtn = document.getElementById("deployBtn");
-
-function setDeployStatus(text) {
-    console.log(text);
-    const el = document.getElementById("deployStatus");
-    if (el) el.textContent = text;
-}
-
-deployBtn?.addEventListener("click", async () => {
     try {
-        deployBtn.disabled = true;
-        setDeployStatus("Preparing deployment...");
 
-        const signer = getSigner();
-        if (!signer) throw new Error("Connect wallet first");
+        const signer =
+            getSigner();
 
-        // buildTokenConfig() sekarang akan otomatis membaca input yang diaktifkan (tidak disabled)
-        const config = buildTokenConfig(); 
-        validateConfig(config);
+        if (!signer) return;
 
-        const factory = await loadFactory(signer);
-        const evozx = await loadEvozx(signer);
+        const balances =
+            await loadBalances(
+                signer.provider,
+                getAddress()
+            );
 
-        setDeployStatus("Calculating fee...");
-        const fee = await factory.getDeploymentFee(config);
-        
-        let evozxBalance = await evozx.balanceOf(getAddress());
-        if (evozxBalance < fee) {
-            setDeployStatus("Auto-buying EVOZX...");
-            await buyMissingEVOZX(signer, fee - evozxBalance);
-            evozxBalance = await evozx.balanceOf(getAddress());
-            if (evozxBalance < fee) throw new Error("Insufficient EVOZX balance");
+        if (evozBalanceEl) {
+            evozBalanceEl.textContent =
+                Number(
+                    balances.evoz
+                ).toFixed(4);
         }
 
-        setDeployStatus("Approving...");
-        const allowance = await evozx.allowance(getAddress(), CONFIG.FACTORY);
-        if (allowance < fee) await (await evozx.approve(CONFIG.FACTORY, fee)).wait();
-
-        setDeployStatus("Deploying...");
-        const tx = await factory.createToken(config);
-        const receipt = await tx.wait();
-
-        const event = receipt.logs.map(l => { try { return factory.interface.parseLog(l); } catch { return null; } }).find(e => e?.name === "TokenCreated");
-        if (!event) throw new Error("Token address not found");
-
-        // Save to Dashboard
-        const myTokens = JSON.parse(localStorage.getItem("myTokens") || "[]");
-        myTokens.push({ name: config.name, symbol: config.symbol, address: event.args.token });
-        localStorage.setItem("myTokens", JSON.stringify(myTokens));
-
-        await refreshBalances();
-        alert(`🚀 TOKEN DEPLOYED\n\nAddress: ${event.args.token}`);
+        if (evozxBalanceEl) {
+            evozxBalanceEl.textContent =
+                Number(
+                    balances.evozx
+                ).toFixed(4);
+        }
 
     } catch (error) {
-        console.error(error);
-        alert(error.reason || error.message || "Deployment failed");
-    } finally {
-        deployBtn.disabled = false;
-        setDeployStatus("");
+
+        console.error(
+            "Balance refresh error:",
+            error
+        );
     }
-});
+}
+
+connectBtn?.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            if (
+                localStorage.getItem(
+                    "walletConnected"
+                ) === "true"
+            ) {
+
+                await disconnectWallet();
+
+                await updateWalletUI(
+                    null
+                );
+
+                return;
+            }
+
+            const wallet =
+                await connectWallet();
+
+            if (!wallet) return;
+
+            await updateWalletUI(
+                wallet
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.message ||
+                "Wallet connection failed"
+            );
+        }
+    }
+);
+
+/* =========================================================
+   FEE CALCULATOR
+========================================================= */
+
+let feeTimeout;
+
+async function updateFee() {
+
+    clearTimeout(feeTimeout);
+
+    feeTimeout = setTimeout(
+        async () => {
+
+            try {
+
+                const signer =
+                    getSigner();
+
+                if (!signer) return;
+
+                const factory =
+                    await loadFactory(
+                        signer
+                    );
+
+                const config =
+                    buildTokenConfig(
+                        getAddress()
+                    );
+
+                const fee =
+                    await factory.getDeploymentFee(
+                        config
+                    );
+
+                const feeEVOZX =
+                    Number(
+                        ethers.formatEther(
+                            fee
+                        )
+                    );
+
+                const feeEVOZ =
+                    feeEVOZX * 5;
+
+                if (feeEvozxEl) {
+                    feeEvozxEl.textContent =
+                        feeEVOZX.toFixed(2);
+                }
+
+                if (feeEvozEl) {
+                    feeEvozEl.textContent =
+                        feeEVOZ.toFixed(2);
+                }
+
+            } catch (error) {
+
+                console.log(
+                    "Fee calculation skipped:",
+                    error.message
+                );
+            }
+
+        },
+        300
+    );
+}
+
+document.addEventListener(
+    "input",
+    (event) => {
+
+        if (
+            event.target.matches(
+                "input,select,textarea"
+            )
+        ) {
+            updateFee();
+        }
+    }
+);
+
+document.addEventListener(
+    "change",
+    (event) => {
+
+        if (
+            event.target.matches(
+                "input,select,textarea"
+            )
+        ) {
+            updateFee();
+        }
+    }
+);
+
+/* =========================================================
+   DEPLOY TOKEN
+========================================================= */
+
+deployBtn?.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            deployBtn.disabled = true;
+
+            setDeployStatus(
+                "Preparing deployment..."
+            );
+
+            const signer =
+                getSigner();
+
+            if (!signer) {
+
+                throw new Error(
+                    "Connect wallet first"
+                );
+            }
+
+            const factory =
+                await loadFactory(
+                    signer
+                );
+
+            const evozx =
+                await loadEvozx(
+                    signer
+                );
+
+            const config =
+                buildTokenConfig(
+                    getAddress()
+                );
+
+            validateConfig(config);
+
+            setDeployStatus(
+                "Calculating fee..."
+            );
+
+            const fee =
+                await factory.getDeploymentFee(
+                    config
+                );
+
+            let balance =
+                await evozx.balanceOf(
+                    getAddress()
+                );
+
+            if (balance < fee) {
+
+                setDeployStatus(
+                    "Buying missing EVOZX..."
+                );
+
+                await buyMissingEVOZX(
+                    signer,
+                    fee - balance
+                );
+
+                balance =
+                    await evozx.balanceOf(
+                        getAddress()
+                    );
+
+                if (balance < fee) {
+
+                    throw new Error(
+                        "Insufficient EVOZX balance"
+                    );
+                }
+            }
+
+            setDeployStatus(
+                "Checking allowance..."
+            );
+
+            const allowance =
+                await evozx.allowance(
+                    getAddress(),
+                    CONFIG.FACTORY
+                );
+
+            if (allowance < fee) {
+
+                setDeployStatus(
+                    "Approving EVOZX..."
+                );
+
+                const approveTx =
+                    await evozx.approve(
+                        CONFIG.FACTORY,
+                        fee
+                    );
+
+                await approveTx.wait();
+            }
+
+            setDeployStatus(
+                "Deploying token..."
+            );
+
+            const tx =
+                await factory.createToken(
+                    config
+                );
+
+            const receipt =
+                await tx.wait();
+
+            let tokenAddress = null;
+
+            for (const log of receipt.logs) {
+
+                try {
+
+                    const parsed =
+                        factory.interface.parseLog(
+                            log
+                        );
+
+                    if (
+                        parsed &&
+                        parsed.name ===
+                            "TokenCreated"
+                    ) {
+
+                        tokenAddress =
+                            parsed.args.token;
+
+                        break;
+                    }
+
+                } catch {}
+            }
+
+            if (!tokenAddress) {
+
+                throw new Error(
+                    "TokenCreated event not found"
+                );
+            }
+
+            const explorerUrl =
+                `${CONFIG.EXPLORER}/token/${tokenAddress}`;
+
+            const myTokens =
+                JSON.parse(
+                    localStorage.getItem(
+                        "myTokens"
+                    ) || "[]"
+                );
+
+            myTokens.push({
+                name: config.name,
+                symbol: config.symbol,
+                address: tokenAddress,
+                deployedAt:
+                    Date.now()
+            });
+
+            localStorage.setItem(
+                "myTokens",
+                JSON.stringify(myTokens)
+            );
+
+            if (
+                deploymentResultEl
+            ) {
+                deploymentResultEl.classList.remove(
+                    "hidden"
+                );
+            }
+
+            if (
+                tokenAddressEl
+            ) {
+                tokenAddressEl.textContent =
+                    tokenAddress;
+            }
+
+            if (
+                explorerLinkEl
+            ) {
+                explorerLinkEl.href =
+                    explorerUrl;
+            }
+
+            if (
+                verificationLinkEl
+            ) {
+                verificationLinkEl.href =
+                    "./assets/standard-input.json";
+            }
+
+            await refreshBalances();
+
+            setDeployStatus(
+                "Deployment completed"
+            );
+
+            alert(
+`🚀 TOKEN DEPLOYED
+
+Token Address:
+${tokenAddress}
+
+Explorer:
+${explorerUrl}`
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            setDeployStatus(
+                "Deployment failed"
+            );
+
+            alert(
+                error.reason ||
+                error.shortMessage ||
+                error.message ||
+                "Deployment failed"
+            );
+
+        } finally {
+
+            deployBtn.disabled =
+                false;
+        }
+    }
+);
+
+/* =========================================================
+   AUTO RESTORE UI
+========================================================= */
+
+window.addEventListener(
+    "load",
+    async () => {
+
+        try {
+
+            if (
+                localStorage.getItem(
+                    "walletConnected"
+                ) === "true"
+            ) {
+
+                const wallet =
+                    await connectWallet();
+
+                if (wallet) {
+                    await updateWalletUI(
+                        wallet
+                    );
+                }
+            }
+
+            updateFee();
+
+        } catch (error) {
+
+            console.log(
+                "Restore skipped"
+            );
+        }
+    }
+);
