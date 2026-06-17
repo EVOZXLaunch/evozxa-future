@@ -20,7 +20,7 @@ EVM Version| Paris
 
 Verification Steps
 
-1. Open EVOZ Explorer Contract Verification.
+1. Open EVOZ Explorer (evozscan.com) Contract Verification.
 2. Select Standard JSON Input.
 3. Download and upload standard-input.json.
 4. Enter the deployed token address.
