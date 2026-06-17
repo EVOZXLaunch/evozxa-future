@@ -20,7 +20,7 @@ import {
 } from "./config.js";
 
 /* =========================================================
-   UI HELPERS
+   DOM
 ========================================================= */
 
 const connectBtn =
@@ -38,16 +38,24 @@ const feeEvozEl =
 const statusEl =
     document.getElementById("deployStatus");
 
-function setStatus(text) {
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(message) {
+
+    console.log(message);
 
     if (statusEl) {
-        statusEl.textContent = text;
+        statusEl.textContent = message;
     }
-
-    console.log(text);
 }
 
-window.toggleAcc = function (header) {
+/* =========================================================
+   ACCORDION
+========================================================= */
+
+window.toggleAcc = function(header) {
 
     const content =
         header.nextElementSibling;
@@ -60,7 +68,7 @@ window.toggleAcc = function (header) {
             : "block";
 };
 
-window.toggleInput = function (checkbox) {
+window.toggleInput = function(checkbox) {
 
     const wrapper =
         checkbox.closest(".feature-wrapper");
@@ -93,39 +101,49 @@ window.toggleInput = function (checkbox) {
 
 async function refreshBalances() {
 
-    const signer =
-        getSigner();
+    try {
 
-    if (!signer) return;
+        const signer =
+            getSigner();
 
-    const balances =
-        await loadBalances(
-            signer.provider,
-            getAddress()
+        if (!signer) return;
+
+        const balances =
+            await loadBalances(
+                signer.provider,
+                getAddress()
+            );
+
+        const evozEl =
+            document.getElementById(
+                "evozBalance"
+            );
+
+        const evozxEl =
+            document.getElementById(
+                "evozxBalance"
+            );
+
+        if (evozEl) {
+            evozEl.textContent =
+                Number(
+                    balances.evoz
+                ).toFixed(4);
+        }
+
+        if (evozxEl) {
+            evozxEl.textContent =
+                Number(
+                    balances.evozx
+                ).toFixed(4);
+        }
+
+    } catch(error) {
+
+        console.error(
+            "Balance refresh error",
+            error
         );
-
-    const evozBalance =
-        document.getElementById(
-            "evozBalance"
-        );
-
-    const evozxBalance =
-        document.getElementById(
-            "evozxBalance"
-        );
-
-    if (evozBalance) {
-        evozBalance.textContent =
-            Number(
-                balances.evoz
-            ).toFixed(4);
-    }
-
-    if (evozxBalance) {
-        evozxBalance.textContent =
-            Number(
-                balances.evozx
-            ).toFixed(4);
     }
 }
 
@@ -148,13 +166,13 @@ connectBtn?.addEventListener(
             connectBtn.textContent =
                 shortAddress;
 
-            const walletAddressEl =
+            const walletAddress =
                 document.getElementById(
                     "walletAddress"
                 );
 
-            if (walletAddressEl) {
-                walletAddressEl.textContent =
+            if (walletAddress) {
+                walletAddress.textContent =
                     shortAddress;
             }
 
@@ -162,7 +180,7 @@ connectBtn?.addEventListener(
 
             await updateFee();
 
-        } catch (error) {
+        } catch(error) {
 
             console.error(error);
 
@@ -178,13 +196,13 @@ connectBtn?.addEventListener(
    FEE CALCULATOR
 ========================================================= */
 
-let feeTimeout;
+let feeTimer;
 
 async function updateFee() {
 
-    clearTimeout(feeTimeout);
+    clearTimeout(feeTimer);
 
-    feeTimeout = setTimeout(
+    feeTimer = setTimeout(
         async () => {
 
             try {
@@ -229,16 +247,16 @@ async function updateFee() {
                         feeEVOZ.toFixed(2);
                 }
 
-            } catch (error) {
+            } catch(error) {
 
                 console.log(
-                    "Fee update skipped:",
+                    "Fee calculation skipped:",
                     error.message
                 );
             }
 
         },
-        300
+        250
     );
 }
 
@@ -271,7 +289,98 @@ document.addEventListener(
 );
 
 /* =========================================================
-   DEPLOY
+   DEPLOY RESULT
+========================================================= */
+
+function showDeploymentResult(
+    tokenAddress,
+    config
+) {
+
+    const resultCard =
+        document.getElementById(
+            "deploymentResult"
+        );
+
+    const tokenAddressEl =
+        document.getElementById(
+            "tokenAddress"
+        );
+
+    const explorerLink =
+        document.getElementById(
+            "explorerLink"
+        );
+
+    const verificationLink =
+        document.getElementById(
+            "verificationLink"
+        );
+
+    if (resultCard) {
+        resultCard.classList.remove(
+            "hidden"
+        );
+    }
+
+    if (tokenAddressEl) {
+        tokenAddressEl.textContent =
+            tokenAddress;
+    }
+
+    if (explorerLink) {
+
+        explorerLink.href =
+            `${CONFIG.EXPLORER}/token/${tokenAddress}`;
+
+        explorerLink.textContent =
+            "Open Explorer";
+    }
+
+    if (verificationLink) {
+
+        verificationLink.href =
+            "./assets/standard-input.json";
+
+        verificationLink.download =
+            `${config.symbol}-standard-input.json`;
+
+        verificationLink.textContent =
+            "Download Package";
+    }
+
+    const deployments =
+        JSON.parse(
+            localStorage.getItem(
+                "evozxaDeployments"
+            ) || "[]"
+        );
+
+    deployments.unshift({
+
+        name:
+            config.name,
+
+        symbol:
+            config.symbol,
+
+        token:
+            tokenAddress,
+
+        timestamp:
+            Date.now()
+    });
+
+    localStorage.setItem(
+        "evozxaDeployments",
+        JSON.stringify(
+            deployments
+        )
+    );
+}
+
+/* =========================================================
+   DEPLOY TOKEN
 ========================================================= */
 
 deployBtn?.addEventListener(
@@ -280,8 +389,7 @@ deployBtn?.addEventListener(
 
         try {
 
-            deployBtn.disabled =
-                true;
+            deployBtn.disabled = true;
 
             setStatus(
                 "Preparing deployment..."
@@ -291,7 +399,6 @@ deployBtn?.addEventListener(
                 getSigner();
 
             if (!signer) {
-
                 throw new Error(
                     "Connect wallet first"
                 );
@@ -334,7 +441,9 @@ deployBtn?.addEventListener(
 
                 throw new Error(
                     `Insufficient EVOZX balance.
-Required: ${ethers.formatEther(fee)} EVOZX`
+
+Required:
+${ethers.formatEther(fee)} EVOZX`
                 );
             }
 
@@ -378,7 +487,10 @@ Required: ${ethers.formatEther(fee)} EVOZX`
             let tokenAddress =
                 null;
 
-            for (const log of receipt.logs) {
+            for (
+                const log
+                of receipt.logs
+            ) {
 
                 try {
 
@@ -411,29 +523,29 @@ Required: ${ethers.formatEther(fee)} EVOZX`
 
             await refreshBalances();
 
+            showDeploymentResult(
+                tokenAddress,
+                config
+            );
+
             setStatus(
                 "Deployment completed"
             );
 
-            const explorer =
-                `${CONFIG.EXPLORER}/token/${tokenAddress}`;
-
             alert(
 `🚀 TOKEN DEPLOYED
 
+Name:
+${config.name}
+
+Symbol:
+${config.symbol}
+
 Address:
-${tokenAddress}
-
-Explorer:
-${explorer}`
+${tokenAddress}`
             );
 
-            console.log(
-                "TOKEN DEPLOYED:",
-                tokenAddress
-            );
-
-        } catch (error) {
+        } catch(error) {
 
             console.error(error);
 
