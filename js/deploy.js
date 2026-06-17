@@ -1,74 +1,454 @@
 import { CONFIG } from "./config.js";
 
-// Variabel untuk Caching ABI agar tidak fetch berulang kali
-let cachedABIs = {};
+/* =========================================================
+   ABI CACHE
+========================================================= */
 
-async function getABI(name) {
-    if (!cachedABIs[name]) {
-        const response = await fetch(`./abi/${name}.json`);
-        cachedABIs[name] = await response.json();
+const ABI_CACHE = new Map();
+
+async function getABI(fileName) {
+
+    if (ABI_CACHE.has(fileName)) {
+        return ABI_CACHE.get(fileName);
     }
-    return cachedABIs[name];
+
+    const response =
+        await fetch(
+            `./abi/${fileName}.json`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load ABI: ${fileName}.json`
+        );
+    }
+
+    const abi =
+        await response.json();
+
+    ABI_CACHE.set(
+        fileName,
+        abi
+    );
+
+    return abi;
 }
 
-export async function loadFactory(signer) {
-    const abi = await getABI("factory");
-    return new ethers.Contract(CONFIG.FACTORY, abi, signer);
+/* =========================================================
+   CONTRACT LOADERS
+========================================================= */
+
+export async function loadFactory(
+    signer
+) {
+
+    const abi =
+        await getABI(
+            "factory"
+        );
+
+    return new ethers.Contract(
+        CONFIG.FACTORY,
+        abi,
+        signer
+    );
 }
 
-export async function loadEvozx(signer) {
-    const abi = await getABI("evozx");
-    return new ethers.Contract(CONFIG.EVOZX, abi, signer);
+export async function loadEvozx(
+    signer
+) {
+
+    const abi =
+        await getABI(
+            "evozx"
+        );
+
+    return new ethers.Contract(
+        CONFIG.EVOZX,
+        abi,
+        signer
+    );
 }
 
-export async function loadExchange(signer) {
-    const abi = await getABI("exchange");
-    return new ethers.Contract(CONFIG.EXCHANGE, abi, signer);
+export async function loadExchange(
+    signer
+) {
+
+    const abi =
+        await getABI(
+            "exchange"
+        );
+
+    return new ethers.Contract(
+        CONFIG.EXCHANGE,
+        abi,
+        signer
+    );
 }
 
-export function buildTokenConfig(ownerAddress) {
-    const marketingWalletInput = document.getElementById("marketingWallet")?.value?.trim();
-    const developmentWalletInput = document.getElementById("developmentWallet")?.value?.trim();
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function getValue(id) {
+
+    return document
+        .getElementById(id)
+        ?.value
+        ?.trim() || "";
+}
+
+function getNumber(id) {
+
+    const value =
+        Number(
+            document
+            .getElementById(id)
+            ?.value || 0
+        );
+
+    return Number.isFinite(value)
+        ? value
+        : 0;
+}
+
+function getChecked(id) {
+
+    return document
+        .getElementById(id)
+        ?.checked || false;
+}
+
+/* =========================================================
+   BUILD TOKEN CONFIG
+========================================================= */
+
+export function buildTokenConfig(
+    ownerAddress
+) {
+
+    const owner =
+        ownerAddress ||
+        ethers.ZeroAddress;
+
+    const marketingWallet =
+        getValue(
+            "marketingWallet"
+        );
+
+    const developmentWallet =
+        getValue(
+            "developmentWallet"
+        );
 
     return {
-        name: document.getElementById("name")?.value?.trim() || "",
-        symbol: document.getElementById("symbol")?.value?.trim()?.toUpperCase() || "",
-        supply: Number(document.getElementById("supply")?.value || 0),
-        owner: ownerAddress || ethers.ZeroAddress,
-        chainId: 0,
-        launchKitVersion: 0,
-        burnable: document.getElementById("burnable")?.checked || false,
-        mintable: document.getElementById("mintable")?.checked || false,
-        ownershipEnabled: document.getElementById("ownership")?.checked || false,
-        website: document.getElementById("websiteUrl")?.value?.trim() || "",
-        telegram: document.getElementById("telegramUrl")?.value?.trim() || "",
-        twitter: document.getElementById("twitterUrl")?.value?.trim() || "",
-        logoURI: document.getElementById("logoUrl")?.value?.trim() || "",
-        maxWalletEnabled: document.getElementById("maxWallet")?.checked || false,
-        maxWalletPercent: Math.min(100, Number(document.getElementById("maxWalletValue")?.value || 0)),
-        maxTxEnabled: document.getElementById("maxTx")?.checked || false,
-        maxTxPercent: Math.min(100, Number(document.getElementById("maxTxValue")?.value || 0)),
-        tradingControlEnabled: document.getElementById("tradingControl")?.checked || false,
-        tradingEnabled: document.getElementById("tradingEnabled")?.checked || false, // Pastikan ada input id ini di HTML Anda
-        buyTaxEnabled: document.getElementById("buyTax")?.checked || false,
-        buyTax: Math.min(10, Number(document.getElementById("buyTaxValue")?.value || 0)),
-        sellTaxEnabled: document.getElementById("sellTax")?.checked || false,
-        sellTax: Math.min(10, Number(document.getElementById("sellTaxValue")?.value || 0)),
-        burnTaxShare: Math.min(100, Number(document.getElementById("burnTaxShare")?.value || 0)),
-        marketingWallet: (marketingWalletInput && ethers.isAddress(marketingWalletInput)) ? marketingWalletInput : (ownerAddress || ethers.ZeroAddress),
-        developmentWallet: (developmentWalletInput && ethers.isAddress(developmentWalletInput)) ? developmentWalletInput : (ownerAddress || ethers.ZeroAddress)
+
+        /* BASIC */
+
+        name:
+            getValue("name"),
+
+        symbol:
+            getValue("symbol")
+                .toUpperCase(),
+
+        supply:
+            getNumber("supply"),
+
+        owner,
+
+        /* NETWORK */
+
+        chainId:
+            CONFIG.CHAIN_ID,
+
+        launchKitVersion:
+            1,
+
+        /* TOKEN FEATURES */
+
+        burnable:
+            getChecked("burnable"),
+
+        mintable:
+            getChecked("mintable"),
+
+        ownershipEnabled:
+            getChecked("ownership"),
+
+        /* METADATA */
+
+        website:
+            getValue(
+                "websiteUrl"
+            ),
+
+        telegram:
+            getValue(
+                "telegramUrl"
+            ),
+
+        twitter:
+            getValue(
+                "twitterUrl"
+            ),
+
+        logoURI:
+            getValue(
+                "logoUrl"
+            ),
+
+        /* LIMITS */
+
+        maxWalletEnabled:
+            getChecked(
+                "maxWallet"
+            ),
+
+        maxWalletPercent:
+            getNumber(
+                "maxWalletValue"
+            ),
+
+        maxTxEnabled:
+            getChecked(
+                "maxTx"
+            ),
+
+        maxTxPercent:
+            getNumber(
+                "maxTxValue"
+            ),
+
+        /* TRADING */
+
+        tradingControlEnabled:
+            getChecked(
+                "tradingControl"
+            ),
+
+        tradingEnabled:
+            getChecked(
+                "tradingEnabled"
+            ),
+
+        /* TAX */
+
+        buyTaxEnabled:
+            getChecked(
+                "buyTax"
+            ),
+
+        buyTax:
+            getNumber(
+                "buyTaxValue"
+            ),
+
+        sellTaxEnabled:
+            getChecked(
+                "sellTax"
+            ),
+
+        sellTax:
+            getNumber(
+                "sellTaxValue"
+            ),
+
+        burnTaxShare:
+            getNumber(
+                "burnTaxShare"
+            ),
+
+        marketingWallet:
+            marketingWallet ||
+            ethers.ZeroAddress,
+
+        developmentWallet:
+            developmentWallet ||
+            ethers.ZeroAddress
     };
 }
 
-export function validateConfig(config) {
-    if (!config.name) throw new Error("Token name required");
-    if (!config.symbol || config.symbol.length < 2) throw new Error("Invalid symbol");
-    if (config.supply <= 0) throw new Error("Supply must be > 0");
-    if (config.supply > 1000000000000) throw new Error("Max supply 1T");
-    if (config.buyTax < 0 || config.buyTax > 10) throw new Error("Buy tax max 10%");
-    if (config.sellTax < 0 || config.sellTax > 10) throw new Error("Sell tax max 10%");
-    
-    // Validasi wallet jika dimasukkan
-    if (config.marketingWallet !== ethers.ZeroAddress && !ethers.isAddress(config.marketingWallet)) throw new Error("Invalid marketing wallet");
-    if (config.developmentWallet !== ethers.ZeroAddress && !ethers.isAddress(config.developmentWallet)) throw new Error("Invalid development wallet");
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+export function validateConfig(
+    config
+) {
+
+    if (!config.name) {
+
+        throw new Error(
+            "Token name required"
+        );
+    }
+
+    if (
+        config.name.length > 64
+    ) {
+
+        throw new Error(
+            "Token name too long"
+        );
+    }
+
+    if (
+        !config.symbol
+    ) {
+
+        throw new Error(
+            "Token symbol required"
+        );
+    }
+
+    if (
+        config.symbol.length < 2
+    ) {
+
+        throw new Error(
+            "Symbol minimum 2 characters"
+        );
+    }
+
+    if (
+        config.symbol.length > 12
+    ) {
+
+        throw new Error(
+            "Symbol maximum 12 characters"
+        );
+    }
+
+    if (
+        !/^[A-Z0-9]+$/.test(
+            config.symbol
+        )
+    ) {
+
+        throw new Error(
+            "Symbol can only contain A-Z and 0-9"
+        );
+    }
+
+    if (
+        config.supply <= 0
+    ) {
+
+        throw new Error(
+            "Supply must be greater than zero"
+        );
+    }
+
+    if (
+        config.supply >
+        1000000000000
+    ) {
+
+        throw new Error(
+            "Maximum supply is 1,000,000,000,000"
+        );
+    }
+
+    if (
+        config.buyTax < 0 ||
+        config.buyTax > 10
+    ) {
+
+        throw new Error(
+            "Buy tax maximum is 10%"
+        );
+    }
+
+    if (
+        config.sellTax < 0 ||
+        config.sellTax > 10
+    ) {
+
+        throw new Error(
+            "Sell tax maximum is 10%"
+        );
+    }
+
+    if (
+        config.maxWalletEnabled
+    ) {
+
+        if (
+            config.maxWalletPercent <= 0 ||
+            config.maxWalletPercent > 100
+        ) {
+
+            throw new Error(
+                "Max Wallet must be 1 - 100%"
+            );
+        }
+    }
+
+    if (
+        config.maxTxEnabled
+    ) {
+
+        if (
+            config.maxTxPercent <= 0 ||
+            config.maxTxPercent > 100
+        ) {
+
+            throw new Error(
+                "Max Tx must be 1 - 100%"
+            );
+        }
+    }
+
+    if (
+        config.marketingWallet !==
+            ethers.ZeroAddress &&
+        !ethers.isAddress(
+            config.marketingWallet
+        )
+    ) {
+
+        throw new Error(
+            "Invalid marketing wallet"
+        );
+    }
+
+    if (
+        config.developmentWallet !==
+            ethers.ZeroAddress &&
+        !ethers.isAddress(
+            config.developmentWallet
+        )
+    ) {
+
+        throw new Error(
+            "Invalid development wallet"
+        );
+    }
+
+    if (
+        config.buyTaxEnabled ||
+        config.sellTaxEnabled
+    ) {
+
+        const hasReceiver =
+
+            config.burnTaxShare > 0 ||
+
+            config.marketingWallet !==
+                ethers.ZeroAddress ||
+
+            config.developmentWallet !==
+                ethers.ZeroAddress;
+
+        if (!hasReceiver) {
+
+            throw new Error(
+                "Tax receiver missing"
+            );
+        }
+    }
+
+    return true;
 }
