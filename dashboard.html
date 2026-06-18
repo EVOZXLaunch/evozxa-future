@@ -1,60 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EVOZXa FUTURE</title>
-    <link rel="stylesheet" href="./css/app.css">
-    <style>
-        /* Penyesuaian khusus tabel agar responsif */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        @media(max-width: 600px) {
-            th:nth-child(1), td:nth-child(1) { display: none; } /* Sembunyikan Nama di mobile jika terlalu sempit */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EVOZXa FUTURE | My Tokens</title>
+
+<style>
+:root{
+    --bg:#050505;
+    --card:#111;
+    --border:#262626;
+    --gold:#d4af37;
+    --muted:#9ca3af;
+    --blue:#3b82f6;
+    --radius:16px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body{
+    background:radial-gradient(circle at top right, rgba(212,175,55,.08), transparent 40%), var(--bg);
+    color:#fff;
+    min-height:100vh;
+}
+
+/* TOPBAR */
+.topbar{
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
+    background:rgba(5,5,5,.9);
+    backdrop-filter:blur(10px);
+}
+
+.brand{
+    font-weight:800;
+    color:var(--gold);
+    letter-spacing:.5px;
+}
+
+.btn{
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:linear-gradient(135deg,var(--gold),#8c6a12);
+    color:#000;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* CONTAINER */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:16px;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    transition:.2s;
+}
+
+.card:hover{
+    border-color:rgba(212,175,55,.4);
+}
+
+/* TOKEN */
+.token-title{
+    font-size:16px;
+    font-weight:700;
+    color:var(--gold);
+}
+
+.token-row{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--muted);
+}
+
+.token-row span{
+    color:#fff;
+}
+
+/* BUTTONS */
+.actions{
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+}
+
+.action-btn{
+    flex:1;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.explorer{
+    background:rgba(59,130,246,.15);
+    color:var(--blue);
+    border-color:rgba(59,130,246,.4);
+}
+
+.download{
+    background:rgba(212,175,55,.15);
+    color:var(--gold);
+    border-color:rgba(212,175,55,.4);
+}
+
+.empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+}
+
+.empty h2{
+    color:var(--gold);
+    margin-bottom:10px;
+}
+</style>
+
 </head>
+
 <body>
 
 <header class="topbar">
-    <div class="brand">
-        <img src="./images/logo.png" alt="EVOZXa">
-        <span>EVOZXa FUTURE</span>
-    </div>
-    <nav class="nav-links">
-        <a href="index.html" style="color: var(--text); text-decoration: none; margin-right: 15px;">Deploy</a>
-        <a href="dashboard.html" style="color: var(--gold); font-weight: bold; text-decoration: none;">Dashboard</a>
-    </nav>
+    <div class="brand">EVOZXa FUTURE | My Tokens</div>
+    <button class="btn" onclick="loadTokens()">Refresh</button>
 </header>
 
 <main class="container">
-    <section class="hero">
-        <h1>Your Deployed Tokens</h1>
-        <p>Manage and verify your smart contracts from here.</p>
-    </section>
 
-    <section class="card">
-        <div style="overflow-x: auto;">
-            <table id="tokenTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Symbol</th>
-                        <th>Address</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tokenList">
-                </tbody>
-            </table>
-        </div>
-        <div id="noTokens" style="text-align: center; padding: 40px; color: var(--muted); display: none;">
-            No tokens found. Deploy one first!
-        </div>
-    </section>
+    <div id="tokenGrid" class="grid"></div>
+
+    <div id="emptyState" class="empty" style="display:none;">
+        <h2>No Tokens Yet</h2>
+        <p>Deploy your first token to see it here.</p>
+    </div>
+
 </main>
 
-<script type="module" src="./js/dashboard.js"></script>
+<script>
+const STORAGE_KEY = "myTokens";
+
+function loadTokens(){
+    const grid = document.getElementById("tokenGrid");
+    const empty = document.getElementById("emptyState");
+
+    const tokens = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+    grid.innerHTML = "";
+
+    if(tokens.length === 0){
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+
+    tokens.forEach((t, index) => {
+
+        const explorer = `https://evozscan.com/address/${t.address}`;
+        const downloadUrl = "./verification/standard-input.json";
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="token-title">${t.name} (${t.symbol})</div>
+
+            <div class="token-row">
+                Address:<br>
+                <span>${t.address}</span>
+            </div>
+
+            <div class="token-row">
+                Network:<br>
+                <span>EVOZ Mainnet</span>
+            </div>
+
+            <div class="actions">
+
+                <button class="action-btn explorer"
+                    onclick="window.open('${explorer}','_blank')">
+                    Explorer
+                </button>
+
+                <a class="action-btn download"
+                    href="${downloadUrl}"
+                    download>
+                    Verification
+                </a>
+
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+loadTokens();
+</script>
+
 </body>
 </html>
